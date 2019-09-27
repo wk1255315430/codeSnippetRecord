@@ -1,0 +1,137 @@
+/*.upcore-navbar{*/
+    /*position: relative;*/
+    /*background-color: @color-text-base-inverse;*/
+    /*width: 100%;*/
+    /*height: 40px;*/
+    /*line-height: 40px;*/
+    /*color: @color-text-paragraph;*/
+    /*text-align: center;*/
+    /*font-size: 16px;*/
+    /*font-weight: 400;*/
+/*}*/
+.energyRecord{
+    background: #fff;
+    position: relative;
+}
+.contrast{
+    padding-top: 44px;
+}
+.energyRecord .contrast{
+    /*border-top: 2px solid #eee;*/
+    border-bottom: 2px solid #eee;
+}
+.energyRecord .title{
+   display: flex;
+   justify-content: space-around;
+   margin:30px 0 9px;
+}
+.energyRecord .title div{
+    font-size: 14px;
+color: #969696;
+letter-spacing: 0.2px;
+line-height: 20px;
+}
+.energyRecord .pic{
+    display: flex;
+   justify-content: space-around;
+   margin-bottom:13px;
+   
+}
+.energyRecord .pic .box{
+    width:116px;
+    height:116px;
+    
+    display: flex;
+    flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   border-radius: 50%;
+   background:url(images/bg1.png) no-repeat;
+   background-size:100% 100%;
+}
+.energyRecord .pic .box.right{
+    background:url(images/bg2.png) no-repeat;
+   background-size:100% 100%;
+}
+.energyRecord .pic .box .value{
+    font-family: PingFangSC-Medium;
+font-size: 18px;
+color: #323232;
+letter-spacing: 0.2px;
+line-height: 20px;
+}
+.energyRecord .pic div .des{
+font-size: 12px;
+color: #969696;
+letter-spacing: 0.2px;
+line-height: 14px;
+}
+.energyRecord .details{
+   display: flex;
+   justify-content: space-around;
+   margin-bottom:20px;
+}
+.energyRecord .details .border{
+    border-left:1px solid #eee;
+    padding-left:5px;
+}
+.energyRecord .details div .value{
+font-family: PingFangSC-Medium;
+font-size: 14px;
+color: #2283E2;
+letter-spacing: 0.23px;
+line-height: 12px;
+margin-bottom:6px;
+}
+.energyRecord .details div .des{
+font-family: PingFangSC-Regular;
+font-size: 10px;
+color: #2283E2;
+letter-spacing: 0.17px;
+line-height: 12px;
+}
+.energyRecord .details .right .value{
+    color:#32B5E6;
+}
+.energyRecord .details .right .des{
+    color:#32B5E6;
+}
+.energyRecord .p{
+    font-size:12px;
+    color:#b4b4b4;
+    text-align: center;
+    margin-top:-35px;
+    margin-bottom:10px;
+}
+.energyRecord .history{
+    position: relative;
+    height:30px
+}
+.energyRecord .history .des{
+    font-family: PingFangSC-Medium;
+font-size: 14px;
+color: #4A90E2;
+letter-spacing: 0.2px;
+position: absolute;
+right:45px;
+
+}
+.energyRecord .history .icon{
+    display: inline-block;
+    position: absolute;
+    width:7px;
+    height:14px;
+    right:26px;
+    top:4px;
+    background: url(images/icon.png) no-repeat;
+    background-size:contain;
+}
+.energyRecord .pk{
+    width:55px;
+    height:55px;
+    background: url(images/pk.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top:55px;
+    left:0;
+}

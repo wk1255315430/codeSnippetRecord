@@ -1,0 +1,92 @@
+.container{
+  width: 48px;
+  height: 48px;
+  margin: auto;
+  border-radius: 14px;
+  text-align: center;
+  -moz-box-shadow:2px 5px 6px #e6eaf5;
+  -webkit-box-shadow:2px 5px 6px #e6eaf5;
+  box-shadow:2px 5px 6px #e6eaf5;
+}
+.container img{
+  width:48px;
+  height: 48px;
+}
+.container p{
+  //margin-top: 10px;
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+
+.itemImgDiv{
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  border: 1px solid #fff;
+  margin: 0 auto;
+}
+.itemImg{
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  border:none;
+  position: relative;
+  top:-0.6px;
+  left:-1px;
+  // display: block;
+}
+.disabledDiv{
+  width: 48px;
+  height: 88px;
+  position: absolute;
+  top:-0px;
+  z-index: 999;
+}
+// 以下为覆盖antd-mobile popover 样式
+.am-popover .am-popover-item-container{
+  height: auto;
+  text-align: center;
+  padding: 5px 0;
+  border-top:none !important;
+  span {
+    width: 100%;
+  }
+}
+
+//.am-popover-item-content{
+//  position: relative;
+//  top:15px;
+//}
+.am-popover-item-container::before{
+  background-color: #fff !important;
+}
+.am-popover .am-popover-item.am-popover-item-active {
+  background-color: #fff !important;
+}
+.am-popover-mask{
+  background-color: transparent;
+}
+.am-popover {
+  width: 100%;
+  left: 0 !important;
+  padding: 0 5%;
+  box-sizing: border-box;
+}
+.am-popover-inner{
+  border-radius:8px;
+  box-shadow:0px 0px 0px #fff;
+  -moz-box-shadow:1px 0px 8px #DDE1EC;
+  -webkit-box-shadow:1px 0px 8px #DDE1EC;
+  box-shadow:1px 0px 8px #DDE1EC;
+}
+.am-popover-arrow {
+  width: 30px;
+  height: 20px;
+  top:-15px !important;
+  box-shadow: none;
+  background: url("../../style/image/icon_arrow.png") 100% 100%;
+  background-size: 100%;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform :rotate(0deg);
+}
