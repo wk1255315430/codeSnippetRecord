@@ -15,7 +15,7 @@
   3. Text body parser
   4. URL-encoded form body parser
 
-##### 使用
+##### 使用body-parser
 
 ```
 npm install body-parser --save
@@ -62,4 +62,33 @@ app.listen(localPort, () => {
 })
 ```
 
-*express 解析post请求需要使用body-parser*第三方包来解析*
+*express 解析post请求需要使用body-parser*第三方包来解析
+
+#### 安装express
+
+```
+npm install express -g
+```
+
+#### 安装express-generator（脚手架）
+
+​	安装它的目的是为了运行 express命令 
+
+```
+npm install express-generator -g
+```
+
+#### 安装依赖
+
+​	将当前工作目录下的package.json文件中的dependencies节点下的所有包依次自动进行局部安装
+
+```
+npm install
+```
+
+#### 启动项目
+
+```
+npm start
+```
+

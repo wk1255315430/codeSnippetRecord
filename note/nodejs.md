@@ -38,5 +38,22 @@
 
  ## 第三方模块
 
-* nodemailer 邮件发送模块
+​	nodemailer 邮件发送模块
 
+## 包的缓存和全局文件夹
+
+ 首先在nodejs的安装目录下新建两个文件夹node_globl和node_cache
+
+-  设置通过npm全局安装的文件路径
+
+  ```
+  npm config set prefix "C:\Program Files\nodejs\node_global"
+  ```
+
+- 设置通过npm安装包的缓存文件的保存路径
+
+  ```
+  npm config set cache "C:\Program Files\nodejs\node_cache"
+  ```
+
+  
