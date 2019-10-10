@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+//二级路由设置。引入router文件夹所有自定义的路由处理文件
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -14,11 +14,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+
+// 把post请求传来的参数自动转成json对象，并且附加到req.body属性上
 app.use(express.json());
+
+// 把get请求传来的参数自动转成对象，附加在req.query属性上，传来的参数类型会转换成字符串
 app.use(express.urlencoded({ extended: false }));
+
+// 默认情况下每次http请求的都会强制携带cookie,这行代码让我们可以使用req.cookie来访问客户端的cookie
 app.use(cookieParser());
+
+// 自动分析出请求路由是不是静态资源的请求，如果是会去punlic文件下找到静态资源返还给客户端
+// path.join()是路由拼接的方法
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 一级路由设置。针对动态数据请求，将请求路由与服务器开发规划的路由匹配，选择合适的二级路由文件
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
