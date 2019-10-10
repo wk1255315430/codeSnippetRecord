@@ -1,5 +1,14 @@
 ## 内置模块
+##### morgan
+
+--是express默认的日志中间件
+
+##### jade
+
+--摸板解析模块（jade代码反人类）一般用不到动它以及更换它
+
  #### 错误处理
+
  * 同步：try catch捕获, 不然后面代码不会执行
  * 异步：callback回调
 
@@ -38,7 +47,33 @@
 
  ## 第三方模块
 
-​	nodemailer 邮件发送模块
+##### nodemailer 
+
+--邮件发送模块
+
+##### request 
+
+--自己服务器去调用其他服务器的接口，发送http请求
+
+##### serve-favicon
+
+--设置浏览器标签页网站logo的模块
+
+##### multer
+
+--用于上传文件
+
+##### jsonwebtoken
+
+--加密和生成用户token
+
+##### express-jwt
+
+--作为中间件验证token
+
+##### mysql
+
+--用来操作数据库的模块，而不是存方数据的数据库
 
 ## 包的缓存和全局文件夹
 
@@ -56,4 +91,71 @@
   npm config set cache "C:\Program Files\nodejs\node_cache"
   ```
 
-  
+
+## 接受数据
+
+​	get req.query
+
+​	post req.body(使用body-parser)
+
+#### 请求体（body-parser）
+
+只有nodejs需要安装body-parser，express默认使用body-parser作为请求体解析中间件
+
+##### 简介
+
+- nodejs body请求的解析中间件
+- 提供四种解析器
+  1. JSON body parser 
+  2. Raw body parser
+  3. Text body parser
+  4. URL-encoded form body parser
+
+##### 使用body-parser
+
+```
+npm install body-parser --save
+```
+
+
+
+```javascript
+//server.js
+var express = require('express')
+var bodyParser = require('body-parser')
+
+const localPort = 3000
+var app = express()
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+
+app.post('/login.do', (req, res) => {
+    console.log('********************')
+    console.log(req.body)
+
+    res.end();
+})
+app.post('/login.do', jsonParser, (req, res) => {
+    console.log('********************')
+    console.log(req.body)
+
+    res.end();
+})
+app.post('/login.do', urlencodedParser, (req, res) => {
+    console.log('********************')
+    console.log(req.body)
+
+    res.end();
+})
+
+app.listen(localPort, () => {
+    console.log('http://127.0.0.1:%s', host, port)
+})
+```
+
+*express 解析post请求需要使用body-parser*第三方包来解析

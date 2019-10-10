@@ -6,7 +6,6 @@ var logger = require('morgan');
 //二级路由设置。引入router文件夹所有自定义的路由处理文件
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
 var app = express();
 
 // view engine setup

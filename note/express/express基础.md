@@ -92,3 +92,27 @@ npm install
 npm start
 ```
 
+#### 目录文件介绍
+
+1. package.json
+
+   文件主要给npm用
+
+   dependencies节点下记录了当前所有依赖的第三方包信息（包名、包的版本号）
+
+2. public
+
+   主要存放当前网站服务器的静态资源文件（html文件、css文件、js文件、图片文件、音频视频文件、字体图标文件等)
+
+3. app.js
+
+   是网站服务器处理请求的一级路由文件，每行代码都得明白作用。俗称服务器的大脑，代码解析在项目express_demo中
+
+4. routes
+
+   存放处理动态数据请求的核心文件
+
+5. bin/www文件
+
+   项目的入口文件，有端口配置。入口文件在package.json的script节点下的start的值里配置
+
