@@ -12,3 +12,5 @@ npm config set cache "C:\Program Files\nodejs\node_cache"
 npm config set prefix "C:\Program Files\nodejs\node_global"
 ```
 
+npm install 可简写为 npm i
+

@@ -1,68 +1,4 @@
-#### 接受数据
 
-​	get req.query
-
-​	post req.body(使用body-parser)
-
-#### 请求体（body-parser）
-
-##### 	简介
-
-- nodejs body请求的解析中间件
-- 提供四种解析器
-  1. JSON body parser 
-  2. Raw body parser
-  3. Text body parser
-  4. URL-encoded form body parser
-
-##### 使用body-parser
-
-```
-npm install body-parser --save
-```
-
-
-
-```javascript
-//server.js
-var express = require('express')
-var bodyParser = require('body-parser')
-
-const localPort = 3000
-var app = express()
-
-// create application/json parser
-var jsonParser = bodyParser.json()
-
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
-
-app.post('/login.do', (req, res) => {
-    console.log('********************')
-    console.log(req.body)
-
-    res.end();
-})
-app.post('/login.do', jsonParser, (req, res) => {
-    console.log('********************')
-    console.log(req.body)
-
-    res.end();
-})
-app.post('/login.do', urlencodedParser, (req, res) => {
-    console.log('********************')
-    console.log(req.body)
-
-    res.end();
-})
-
-app.listen(localPort, () => {
-    console.log('http://127.0.0.1:%s', host, port)
-})
-```
-
-*express 解析post请求需要使用body-parser*第三方包来解析
 
 #### 安装express
 
@@ -116,3 +52,81 @@ npm start
 
    项目的入口文件，有端口配置。入口文件在package.json的script节点下的start的值里配置
 
+#### 服务端缓存
+
+当用户查看像分类列表或首页那种不常变并且每个用户看的都一样的内容时，服务端可以在启动时就从数据库把所有的分类请求回来放在后台的变量里面，客户端每次请求二级分类时，则在变量里面查询并返回数据。当然像分类列表最应该放在客户端进行缓存。
+
+#### 模块配置
+
+##### mysql连接池配置
+
+- 连接池一次建立多个连接，解决了每次请求都创建结束造成的时间和性能上的缓慢
+- 具体配置说明见npmjs中mysql介绍
+
+1. 在config文件夹下新建文件mysql.js，并写入如下代码
+
+   ```js
+   // config/mysql.js
+   const mysql = require('mysql');
+   var pool = mysql.createPool({
+       connectionLimit: 10,
+       host: 'localhost',
+       user: 'root',
+       password: 'root',
+       database: 'express_demo',
+       multipleStatements: true,
+       debug:true,
+   });
+   //常规SQL
+   let query = function(sql, arr = [], callback) {
+       //建立链接
+       pool.getConnection(function(err, connection) {
+           if (err) throw err;
+           connection.query(sql, arr, function(error, results, fields) {
+               //将链接返回到连接池中，准备由其他人重复使用
+               connection.release();
+               if (error) throw error;
+               //执行回调函数，将数据返回
+               callback && callback(results, fields);
+           });
+       });
+   };
+   module.exports = {
+       query,
+       pool
+   }
+   ```
+
+2. 路由文件中使用新建的mysql.js
+
+   ```js
+   // router/user.js
+   
+   var express = require('express');
+   var router = express.Router();
+   //数据库
+   var db = require('../config/mysql')
+   /**
+    * @api {get} /user/login 根据用户名查密码
+    * @apiName /user/logi 上传微信用户信息
+    * @apiGroup User
+    * 
+    * @apiParam { String } username 用户名称.
+    * 
+    * @apiSampleRequest /user/login
+    */
+   router.get('/login', function (req, res, next) {
+     let {username} = req.query;
+     let sql = 'SELECT password FROM users WHERE username = ?';
+     db.query(sql, [username], function (result, fields) {
+       res.json({
+         status: false,
+         msg: '查询成功',
+         data:result
+       })
+     })
+   });
+   module.exports = router;
+   ```
+
+   

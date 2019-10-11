@@ -22,7 +22,7 @@
     "serve-favicon": "^2.5.0"
   },
   "apidoc": {
-    "name": "商城API文档",
-    "title": "商城API文档"
+    "name": "express_demo api",
+    "title": "express_demo api"
   }
 }
