@@ -91,31 +91,31 @@
 - 执行完语句navicat不会自动刷新，需要手动刷新查看结果
 - =等号在sql中为赋值或判等
 
-1. 插入数据
+1. ##### 插入数据
 
    ```mysql
    INSERT INTO `tablename`(`filed1`,`filed2`) VALUES(value1，value2);
    ```
 
-2. 批量插入
+2. ##### 批量插入
 
    ```mysql
    INSERT INTO `tablename`(`filed1`,`filed2`) VALUES(value1，value2),(value1，value2);
    ```
 
-3. 删除表数据
+3. ##### 删除表数据
 
    ```mysql
    DELETE FROM `tablename`
    ```
 
-4. 重置表：作用是删除并重置表，主要在上线时重置或用来恢复主键从0开始
+4. ##### 重置表：作用是删除并重置表，主要在上线时重置或用来恢复主键从0开始
 
    ```mysql
    TRUNCATE TABLE `tablename`
    ```
 
-5. 查询语句：学习周期占学习所有语句9成时间。
+5. ##### 查询语句：学习周期占学习所有语句9成时间。
 
    - 条件查询
 
@@ -123,4 +123,73 @@
      SELECT * FROM `tablename` WHERE `filed`= value
      ```
 
-     
+6. ##### 存储过程函数
+
+   - 当需要条件判断已执行sql语句时，可以在数据库新建调用存储过程函数或者在后台代码中处理。
+
+   - P_LoginByPhone为函数名
+   - 主体部分类似js的function(){} 在sql中用BEGIN和END表示条件成立的语句块
+
+   ```mysql
+   //删除已存在的函数
+   DROP PROCEDURE IF EXISTS `P_LoginByPhone`;
+   //函数的主体部分
+   DELIMITER $$
+   CREATE PROCEDURE `P_LoginByPhone`
+   (
+      ...
+   )
+   BEGIN
+   	...
+   END;
+   $$ DELIMITER;
+   ```
+
+   以下是一个创建存储过程的示例：
+
+   ```mysql
+   DROP PROCEDURE IF EXISTS `P_LoginByPhone`;
+   DELIMITER $$
+   CREATE PROCEDURE `P_LoginByPhone`
+   (
+       _phone varchar(20)
+   )
+   BEGIN
+   	//DECLARE声明一个变量为_name类型为varchar,20字节，默认值为null
+   	DECLARE _name varchar(20) DEFAULT NULL;
+   	SELECT `name` INTO _name FROM `dt_user` WHERE `phone` = _phone;
+   	//条件判断 IS相当于js中的判等（===）
+   	IF _name IS NULL THEN
+   		INSERT INTO `dt_user`(`name`,`pwd`,`phone`) VALUES (_phone,'123',_phone);
+   		//SELECT在if判断中相当于js中的return,AS 为设置别名
+   		SELECT _phone AS `phone`;
+   	ELSE
+   		SELECT _phone AS `phone`;
+   	//固定已END IF结束
+   	END IF;
+   END;
+   $$ DELIMITER;
+   ```
+
+   调用存储过程
+
+   ```
+   CALL P_loginByPhone('15563646873');
+   ```
+
+   
+
+7. if条件判断
+
+   ```mysql
+   IF _name IS NULL THEN
+   	INSERT INTO `dt_user`(`name`,`pwd`,`phone`) VALUES (_phone,'123',_phone);
+   	//SELECT在if判断中相当于js中的return
+   	SELECT _phone AS `phone`;
+   ELSE
+   	SELECT _phone AS `phone`;
+   	//固定已END IF结束
+   END IF;
+   ```
+
+   
