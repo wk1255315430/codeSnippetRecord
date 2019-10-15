@@ -2,8 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 Vue.use(Router);
 import routerAdmin from "./routerAdmin";
+import routerUser from "./routerUser";
 const router = new Router({
-  routes: [...routerAdmin]
+  routes: [...routerAdmin, ...routerUser]
 });
 
 // router.beforeEach((to, from, next) => {

@@ -1,14 +1,10 @@
 // 管理员路由
 export default [
   {
-    path: "/",
-    name: "home",
-    component: () => import(/* webpackChunkName: "home" */ "@/views/Home.vue")
-  },
-  {
-    path: "/about",
-    name: "about",
+    path: "/admin",
+    name: "admin",
     meta: { requiredAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ "@/views/About.vue")
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/admin/Admin.vue")
   }
 ];

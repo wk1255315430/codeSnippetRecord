@@ -3,29 +3,30 @@ var router = express.Router();
 //数据库
 var db = require('../config/mysql')
 /**
- * @api {get} /user/login 根据用户名查密码
- * @apiName /user/logi 上传微信用户信息
+ * @api {post} /user/login 验证邮箱并注册登录
+ * @apiName /user/logi 邮箱验证
  * @apiGroup User
- * 
- * @apiParam { String } username 用户名称.
- * 
+ * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
+ * @apiParam { String } email 用户帐号
+ * @apiParam { String } emailCode 邮箱验证码或登录密码.
+ * @apiParam { String } nickname 用户姓名.
+ * @apiSuccess {Object} status 0:密码错误,1：新用户,2：老用户
  * @apiSampleRequest /user/login
  */
-router.get('/login', function (req, res, next) {
-  let { name } = req.query;
-  let sql = 'SELECT `password` FROM `users` WHERE `name` = ?';
-  db.query(sql, [name], (results, fields) => {
+router.post('/login', function (req, res, next) {
+  let { email,emailCode,nickname} = req.body;
+  console.log(req.body);
+  let sql = 'CALL login(?,?,?)';
+  db.query(sql, [email,emailCode,nickname], (results, fields) => {
     if (!results.length) {
       return res.json({
         status: false,
-        msg: '查询失败',
         data: null
       })
     };
     res.json({
       status: true,
-      msg: '查询成功',
-      data: results
+      data: results[0]
     })
   })
 });
