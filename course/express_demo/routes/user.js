@@ -12,13 +12,20 @@ var db = require('../config/mysql')
  * @apiSampleRequest /user/login
  */
 router.get('/login', function (req, res, next) {
-  let {username} = req.query;
-  let sql = 'SELECT password FROM users WHERE username = ?';
-  db.query(sql, [username], function (result, fields) {
+  let { name } = req.query;
+  let sql = 'SELECT `password` FROM `users` WHERE `name` = ?';
+  db.query(sql, [name], (results, fields) => {
+    if (!results.length) {
+      return res.json({
+        status: false,
+        msg: '查询失败',
+        data: null
+      })
+    };
     res.json({
-      status: false,
+      status: true,
       msg: '查询成功',
-      data:result
+      data: results
     })
   })
 });

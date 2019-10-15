@@ -193,3 +193,24 @@
    ```
 
    
+
+```mysql
+报错 保存不了
+DROP PROCEDURE IF EXISTS login;
+DELIMITER $$
+CREATE PROCEDURE `login`(
+_email,_password,_nickname
+)
+BEGIN
+  DECLARE _name VARCHAR(255) DEFAULT NULL;
+	DECLARE _count INT(255) DEFAULT 0;
+	SELECT `name` INTO _name,`count` INTO `_count` FROM `users` WHERE `name` = _email;
+	IF _name IS NULL THEN
+		INSERT INTO `users`(`name`,`password`,`nickname`,`tel`,`created_at`,`updated_at`) VALUES(_email,_password,_nickname,null,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
+		SELECT _name AS `name`, _password AS `password`;
+	ELSE
+		SELECT _count AS `count` = _count + 1;
+END;
+$$ DELIMITER;
+```
+
