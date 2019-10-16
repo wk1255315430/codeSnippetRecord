@@ -14,20 +14,21 @@ var db = require('../config/mysql')
  * @apiSampleRequest /user/login
  */
 router.post('/login', function (req, res, next) {
-  let { email,emailCode,nickname} = req.body;
+  let { email, emailCode, nickname } = req.body;
   console.log(req.body);
   let sql = 'CALL login(?,?,?)';
-  db.query(sql, [email,emailCode,nickname], (results, fields) => {
-    if (!results.length) {
-      return res.json({
+  db.query(sql, [email, emailCode, nickname])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results[0]
+      })
+    })
+    .catch(message => {
+      res.json({
         status: false,
         data: null
       })
-    };
-    res.json({
-      status: true,
-      data: results[0]
     })
-  })
 });
 module.exports = router;
