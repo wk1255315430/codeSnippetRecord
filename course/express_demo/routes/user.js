@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 //数据库
 var db = require('../config/mysql')
+let articleCount;
+let temSql = 'select count(*) from article';
+db.query(temSql)
+.then(results=>{
+  articleCount = results[0]['count(*)'];
+})
 /**
  * @api {post} /user/login 验证邮箱并注册登录
  * @apiName /user/logi 邮箱验证
@@ -27,8 +33,62 @@ router.post('/login', function (req, res, next) {
     .catch(message => {
       res.json({
         status: false,
-        data: null
+        data: message
       })
     })
 });
+/**
+ * @api {post} /user/articles 分页查询所有文章列表
+ * @apiName /user/articles 文章列表
+ * @apiGroup User
+ * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
+ * @apiParam { Number } page_number 第几页,一页10篇文章
+ * @apiSuccess {String} count 文章总页数
+ * @apiSampleRequest /user/articles
+ */
+router.post('/articles', function (req, res, next) {
+  let { page_number } = req.body
+  let lines_perpage = 10;
+  let page_start = (page_number - 1)*lines_perpage;
+  let sql = "SELECT `id`,`title`,`description` FROM article LIMIT ? , ?";
+  db.query(sql, [page_start, lines_perpage])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results,
+        count:articleCount
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /user/articleById 通过id查询文章,文章为mardown文件
+ * @apiName /user/articleById 文章列表
+ * @apiGroup User
+ * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
+ * @apiParam { Number } id 文章id
+ * @apiSampleRequest /user/articleById
+ */
+router.post('/articleById',(req,res,next)=>{
+  let { id } = req.body;
+  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` FROM article WHERE id = ?'
+  db.query(sql,[id])
+  .then(results=>{
+    res.json({
+      status:true,
+      data:results[0]
+    })
+  })
+  .catch(message=>{
+    res.json({
+      status: false,
+      data: message
+    })
+  })
+})
 module.exports = router;
