@@ -36,8 +36,27 @@ export default {
   },
   data() {
     return {
-      content:''
+      content: "",
+      id: ""
     };
+  },
+  methods: {
+    getInitData(id) {
+      this.$axios
+        .post("user/articleById", {
+          id: id
+        })
+        .then(({ data: res }) => {
+          if (res.status) {
+            this.content = res.data.content;
+          }
+        });
+    }
+  },
+  created() {
+    let id = this.$route.query.id;
+    this.id = id;
+    this.getInitData(id);
   }
 };
 </script>

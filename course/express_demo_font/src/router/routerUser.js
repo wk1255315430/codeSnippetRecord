@@ -4,6 +4,7 @@ export default [
     path: "/",
     name: "home",
     meta: { requiredAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ "@/views/Home.vue")
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/users/Home.vue")
   }
 ];
