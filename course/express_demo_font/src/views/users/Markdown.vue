@@ -20,6 +20,9 @@
           </p>
         </div>
       </div>
+        <p @click="getInitDataId">发送==》</p>
+          <p @click="linkSocket">连接</p>
+          <input type="text" v-model="socketId">
     </el-main>
     <el-footer></el-footer>
   </el-container>
@@ -37,7 +40,8 @@ export default {
   data() {
     return {
       content: "",
-      id: ""
+      id: "",
+      socketId: ""
     };
   },
   methods: {
@@ -51,12 +55,33 @@ export default {
             this.content = res.data.content;
           }
         });
+    },
+    linkSocket() {
+      this.$socket.emit("login", {
+        username: "username",
+        password: "password"
+      });
+    },
+    getInitDataId() {
+      this.$socket.emit("sayTo", {
+        toId: this.socketId
+      });
     }
   },
   created() {
+    let that = this;
     let id = this.$route.query.id;
     this.id = id;
     this.getInitData(id);
+    //接收服务端的信息
+    this.sockets.subscribe("relogin", data => {
+      console.log(data, "relogin");
+    });
+    //接收服务端的信息
+    this.sockets.subscribe("reId", data => {
+      console.log(data, "reId");
+      that.socketId = data.msg;
+    });
   }
 };
 </script>

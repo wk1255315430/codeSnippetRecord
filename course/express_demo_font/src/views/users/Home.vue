@@ -54,7 +54,7 @@ export default {
         path: "/test",
         query: { id: id }
       });
-    }
+    },
   },
   created() {
     this.getInitData();

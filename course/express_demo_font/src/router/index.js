@@ -4,16 +4,7 @@ Vue.use(Router);
 import routerAdmin from "./routerAdmin";
 import routerUser from "./routerUser";
 const router = new Router({
-  routes: [
-    ...routerAdmin,
-    ...routerUser,
-    {
-      path: "/test",
-      name: "test",
-      component: () =>
-        import(/* webpackChunkName: "about" */ "@/components/markdown.vue")
-    }
-  ]
+  routes: [...routerAdmin, ...routerUser]
 });
 
 // router.beforeEach((to, from, next) => {
