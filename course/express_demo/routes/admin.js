@@ -102,16 +102,18 @@ router.put("/upload/articleImg", upload.single("file"), function (req, res, next
  */
 
 router.post('/upload/delete', function (req, res) {
-  let realPath = path.resolve(__dirname, '../public/', req.body.src);
-  fs.unlink(realPath, function (err) {
-    if (err) {
-      return console.error(err);
-    }
-    res.json({
-      status: true,
-      msg: "success!"
-    });
-  })
+  // TODO:服务器删除图片
+  let realPath = path.resolve(__dirname, '../../public/', req.body.src);
+  console.log(realPath,"realPath");
+  // fs.unlinkSync(realPath, function (err) {
+  //   if (err) {
+  //     return console.error(err);
+  //   }
+  //   res.json({
+  //     status: true,
+  //     msg: "success!"
+  //   });
+  // })
 });
 // 脚，固定写法
 module.exports = router;

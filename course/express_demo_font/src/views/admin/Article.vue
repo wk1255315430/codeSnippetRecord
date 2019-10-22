@@ -1,11 +1,17 @@
 <template>
   <div id="article">
-    <mavon-editor :ishljs="false" :toolbars="toolbars" v-model="value" ref="md" @imgAdd="$imgAdd" />
+    <mavon-editor
+      :ishljs="false"
+      :toolbars="toolbars"
+      v-model="value"
+      ref="md"
+      @imgAdd="$imgAdd"
+      @imgDel="$imgDel"
+    />
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
   data() {
     return {
@@ -48,30 +54,32 @@ export default {
     };
   },
   components: {
-    // Editor:require("@/components/MavonEditor.vue").default
   },
   methods: {
-    // 绑定@imgAdd event
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       const formdata = new FormData();
       formdata.append("file", $file);
-      axios({
+      this.$axios({
         url: "/admin/upload/articleImg",
         method: "put",
         data: formdata,
         headers: { "Content-Type": "" }
-      }).then(url => {
-        // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
-        /**
-         * $vm 指为mavonEditor实例，可以通过如下两种方式获取
-         * 1.  通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
-         * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
-         * 3. 由于vue运行访问的路径只能在static下，so，我就把图片保存到它这里了
-         */
-        // this.$refs.md.$img2Url(pos, 'http://localhost:8002/static/image/' + url.data.data)
+      }).then(({ data: res }) => {
+        if (res.status) {
+          this.$refs.md.$img2Url(pos, "http://localhost:3000" + res.lgImg);
+        }
       });
-      console.log(formdata);
+    },
+    $imgDel(pos, $file) {
+      let params = pos[0].split(":3000")[1];
+      this.$axios
+        .post("/admin/upload/delete", {
+          src: params
+        })
+        .then(({ data: res }) => {
+          console.log(res);
+        });
     }
   }
 };
