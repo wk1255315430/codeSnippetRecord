@@ -49,31 +49,85 @@
 
 ##### nodemailer 
 
---邮件发送模块
+> 邮件发送模块
 
 ##### request 
 
---自己服务器去调用其他服务器的接口，发送http请求
+> 自己服务器去调用其他服务器的接口，发送http请求
 
 ##### serve-favicon
 
---设置浏览器标签页网站logo的模块
+> 设置浏览器标签页网站logo的模块
 
 ##### multer
 
---用于上传文件
+> 用于上传文件
+
+```vue
+#vue
+methods: {
+    // 绑定@imgAdd event
+    $imgAdd(pos, $file) {
+      // 第一步.将图片上传到服务器.
+      const formdata = new FormData();
+      formdata.append("file", $file);
+      axios({
+        url: "/admin/upload/articleImg",
+        method: "put",
+        data: formdata,
+        headers: { "Content-Type": "" }
+      }).then(url => {
+        // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
+        /**
+         * $vm 指为mavonEditor实例，可以通过如下两种方式获取
+         * 1.  通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
+         * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
+         * 3. 由于vue运行访问的路径只能在static下，so，我就把图片保存到它这里了
+         */
+        // this.$refs.md.$img2Url(pos, 'http://localhost:8002/static/image/' + url.data.data)
+      });
+      console.log(formdata);
+    }
+  }
+```
+
+![1571728039450](C:\Users\ThinkPad\Desktop\codeSnippetRecord\note\1571728039450.png)
+
+```
+#nodejs
+const multer = require('multer');
+const upload = multer();
+router.put("/upload/articleImg", upload.single("file"), function (req, res, next) {
+  console.log(req.file, req.body, 'req')
+  res.json({
+    data: "ok"
+  })
+})
+```
+
+![1571728105366](C:\Users\ThinkPad\Desktop\codeSnippetRecord\note\1571728105366.png)
+
+
 
 ##### jsonwebtoken
 
---加密和生成用户token
+> 加密和生成用户token
 
 ##### express-jwt
 
---作为中间件验证token
+> 作为中间件验证token
 
 ##### mysql
 
---用来操作数据库的模块，而不是存方数据的数据库
+> 用来操作数据库的模块，而不是存方数据的数据库
+
+##### mavon-editor
+
+> markdown的编辑器
+
+##### markdown-it-vue
+
+> 展示markdown文件的包
 
 ## 包的缓存和全局文件夹
 

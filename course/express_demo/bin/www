@@ -38,15 +38,17 @@ io.on('connection', function (socket) {
     // 在服务器再建立个客户端，来发送数据给指定用户
     // 发送数据
     socket.emit('reId', {
-      msg: name,
-      code: 200
+      msg: name
     });  
   });
   socket.on('sayTo', function (data) {
     let toId = data.toId;
-    console.log(typeof toId,toId)
       let toSocket = _.findWhere(io.sockets.sockets, { id: toId });
-      toSocket.emit('relogin', 1);
+      if(toSocket){
+        toSocket.emit('relogin', 1);
+      }else{
+        console.log('error:',`'${toId}用户已离开socket'`)
+      }
   });
 });
 /**

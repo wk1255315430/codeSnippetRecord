@@ -5,6 +5,13 @@ export default [
     name: "admin",
     meta: { requiredAuth: true },
     component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/admin/Admin.vue")
+      import(/* webpackChunkName: "admin" */ "@/views/admin/Admin.vue")
+  },
+  {
+    path: "/admin/article",
+    name: "article",
+    meta: { requiredAuth: true },
+    component: () =>
+      import(/* webpackChunkName: "admin" */ "@/views/admin/Article.vue")
   }
 ];

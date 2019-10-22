@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 //二级路由设置。引入router文件夹所有自定义的路由处理文件
-var indexRouter = require('./routes/index');
+var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/user');
 var app = express();
 
@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 一级路由设置。针对动态数据请求，将请求路由与服务器开发规划的路由匹配，选择合适的二级路由文件
-app.use('/', indexRouter);
+app.use('/admin', adminRouter);
 app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler

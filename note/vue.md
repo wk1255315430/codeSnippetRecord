@@ -108,3 +108,6 @@ vue create <Project Name> #创建项目文件名不支持驼峰（含大写字�
 ##### vue-cli3和vue-cli2搭建的区别
 
 在3代中，webpack的配置已经被脚手架默认了，并不会显示。如果我们需要手动配置webpack的一些配置，可以在根目录下，手动创建配置文件---vue.config.js
+
+
+

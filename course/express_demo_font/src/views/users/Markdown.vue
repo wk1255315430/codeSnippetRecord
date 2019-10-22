@@ -77,11 +77,12 @@ export default {
     this.sockets.subscribe("relogin", data => {
       console.log(data, "relogin");
     });
-    //接收服务端的信息
+    //从服务端获取当前socket连接的用户id
     this.sockets.subscribe("reId", data => {
-      console.log(data, "reId");
       that.socketId = data.msg;
     });
+    // this.sockets.unsubscribe('reId');
+    // this.sockets.unsubscribe('relogin');
   }
 };
 </script>
