@@ -75,18 +75,10 @@ router.put("/upload/articleImg", upload.single("file"), function (req, res, next
     .save("public" + fileFolder + filename + "_720" + extName, {
       quality: 70 //保存图片到文件,图片质量为70
     });
-
-  images(req.file.buffer)
-    .resize(360) //缩放尺寸至360宽
-    .save("public" + fileFolder + filename + "_360" + extName, {
-      quality: 70 //保存图片到文件,图片质量为70
-    });
-  //返回储存结果
   res.json({
     status: true,
     msg: "图片上传处理成功!",
     lgImg: fileFolder + filename + "_720" + extName,
-    mdImg: fileFolder + filename + "_360" + extName
   });
 })
 /**
@@ -95,25 +87,22 @@ router.put("/upload/articleImg", upload.single("file"), function (req, res, next
  * @apiName upload/delete/
  * @apiGroup Upload Image
  * @apiPermission admin
- * 
- * @apiParam {String} src 图片文件路径,注：src='./images/articleImg/file.jpg'，必须严格按照规范路径，'./images'不可省略;
- * 
+ * @apiParam {String} src 图片文件路径,注：src='/images/articleImg/59e13a90-f537-11e9-bcae-3999c5549009_720.jpg';
  * @apiSampleRequest /admin/upload/delete/
  */
 
 router.post('/upload/delete', function (req, res) {
-  // TODO:服务器删除图片
-  let realPath = path.resolve(__dirname, '../../public/', req.body.src);
-  console.log(realPath,"realPath");
-  // fs.unlinkSync(realPath, function (err) {
-  //   if (err) {
-  //     return console.error(err);
-  //   }
-  //   res.json({
-  //     status: true,
-  //     msg: "success!"
-  //   });
-  // })
+  let realPath = path.join(__dirname, '../public/', req.body.src);
+  console.log(realPath, "realPath")
+  fs.unlink(realPath, function (err) {
+    if (err) {
+      return console.log(err);
+    }
+    res.json({
+      status: true,
+      msg: "删除成功"
+    });
+  })
 });
 // 脚，固定写法
 module.exports = router;

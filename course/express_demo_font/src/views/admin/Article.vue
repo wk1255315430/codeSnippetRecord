@@ -1,13 +1,53 @@
 <template>
   <div id="article">
-    <mavon-editor
-      :ishljs="false"
-      :toolbars="toolbars"
-      v-model="value"
-      ref="md"
-      @imgAdd="$imgAdd"
-      @imgDel="$imgDel"
-    />
+    <el-form ref="form" :model="form" :rules="rules" label-width="10%">
+      <el-form-item label="斗十千" prop="title">
+        <el-input v-model="form.title"></el-input>
+      </el-form-item>
+      <el-form-item label="金樽清酒">
+        <el-select
+          v-model="form.cate_1st"
+          placeholder="请选择"
+          @change="cateChangeHandle_1st"
+          prop="cate_1st"
+        >
+          <el-option
+            v-for="item in dataCategory_lst"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+        <el-select v-model="form.cate_2nd" placeholder="请选择" prop="cate_2nd">
+          <el-option
+            v-for="item in dataCategory_2st"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="欲渡" prop="link">
+        <el-input v-model="form.link"></el-input>
+      </el-form-item>
+      <el-form-item label="黄河" prop="description">
+        <el-input v-model="form.description"></el-input>
+      </el-form-item>
+      <el-form-item label="行路难">
+        <mavon-editor
+          :ishljs="false"
+          :toolbars="toolbars"
+          v-model="form.content"
+          ref="md"
+          @imgAdd="$imgAdd"
+          @imgDel="$imgDel"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('form')">直挂</el-button>
+        <el-button @click="resetForm('form')">归去</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -15,7 +55,6 @@
 export default {
   data() {
     return {
-      value: "",
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -50,11 +89,31 @@ export default {
         /* 2.2.1 */
         subfield: true, // 单双栏模式
         preview: true // 预览
+      },
+      rules: {
+        title: [
+          { required: true, message: "不能为空", trigger: "blur" },
+          {
+            min: 0,
+            max: 1000,
+            message: "长度在 1 到 1000 个字符",
+            trigger: "blur"
+          }
+        ]
+      },
+      dataCategory_lst: [{ id: 1, name: "停杯" }, { id: 2, name: "投箸" }],
+      dataCategory_2st: [{ id: 1, name: "拔剑" }, { id: 2, name: "四顾" }],
+      form: {
+        cate_1st: "",
+        cate_2nd: "",
+        title: "",
+        description: "",
+        content: "",
+        link: ""
       }
     };
   },
-  components: {
-  },
+  components: {},
   methods: {
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
@@ -80,9 +139,31 @@ export default {
         .then(({ data: res }) => {
           console.log(res);
         });
-    }
+    },
+    cateChangeHandle_1st() {
+      if (this.form.cate_2nd) {
+        this.form.cate_2nd = "";
+      }
+      // TODO:请求数据
+      // this.Category_2st();
+    },
+    // TODO:提交重置
+    submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
   }
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+</style>
