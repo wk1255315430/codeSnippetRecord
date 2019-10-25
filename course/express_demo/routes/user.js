@@ -10,7 +10,7 @@ db.query(temSql)
   })
 /**
  * @api {post} /user/login 验证邮箱并注册登录
- * @apiName /user/logi 邮箱验证
+ * @apiName /user/logi
  * @apiGroup User
  * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
  * @apiParam { String } email 用户帐号
@@ -39,7 +39,7 @@ router.post('/login', function (req, res, next) {
 });
 /**
  * @api {post} /user/articles 分页查询所有文章列表
- * @apiName /user/articles 文章列表
+ * @apiName /user/articles
  * @apiGroup User
  * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
  * @apiParam { Number } page_number 第几页,一页10篇文章
@@ -68,7 +68,7 @@ router.post('/articles', function (req, res, next) {
 })
 /**
  * @api {post} /user/articleById 通过id查询文章,文章为mardown文件
- * @apiName /user/articleById 文章列表
+ * @apiName /user/articleById
  * @apiGroup User
  * @apiHeader {String} Content-Type=application/x-www-form-urlencoded
  * @apiParam { Number } id 文章id

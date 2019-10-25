@@ -1,7 +1,7 @@
 // 头，固定写法
 var express = require('express');
 var router = express.Router();
-
+var db = require('../config/mysql')
 var fs = require("fs");
 var path = require("path");
 let server = {
@@ -90,7 +90,6 @@ router.put("/upload/articleImg", upload.single("file"), function (req, res, next
  * @apiParam {String} src 图片文件路径,注：src='/images/articleImg/59e13a90-f537-11e9-bcae-3999c5549009_720.jpg';
  * @apiSampleRequest /admin/upload/delete/
  */
-
 router.post('/upload/delete', function (req, res) {
   let realPath = path.join(__dirname, '../public/', req.body.src);
   console.log(realPath, "realPath")
@@ -104,5 +103,137 @@ router.post('/upload/delete', function (req, res) {
     });
   })
 });
+/**
+ * @api {post} /admin/category 查询所有文章分类
+ * @apiName /admin/category
+ * @apiGroup admin
+ * @apiParam { Number } pId 几级分类
+ * @apiSampleRequest /admin/category
+ */
+router.post('/category', (req, res, next) => {
+  let { pId } = req.body;
+  let sql = "SELECT * FROM `category` WHERE pId = ?";
+  db.query(sql, [pId])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /admin/categoryAdd 添加文章子分类
+ * @apiName /admin/categoryAdd
+ * @apiGroup admin
+ * @apiParam { Number } pId 几级分类,pId为已有的分类
+ * @apiSampleRequest /admin/categoryAdd
+ */
+router.post('/categoryAdd', (req, res, next) => {
+  let { pId, name } = req.body;
+  let sql = 'INSERT INTO `category`(`name`,`pId`) VALUES(?,?)';
+  db.query(sql, [name, pId])
+    .then(results => {
+      res.json({
+        status: true,
+        data: '',
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /admin/categoryDel 删除文章子分类
+ * @apiName /admin/categoryDel
+ * @apiGroup admin
+ * @apiParam { Number } id 要删除的分类id
+ * @apiSampleRequest /admin/categoryDel
+ */
+router.post('/categoryDel', (req, res, next) => {
+  let { id } = req.body;
+  let sql = 'DELETE FROM `category` WHERE id=?';
+  db.query(sql, [id])
+    .then(results => {
+      if (!results.affectedRows) {
+        return res.json({
+          status: false,
+          data: '无此分类'
+        })
+      }
+      res.json({
+        status: true,
+        data: ''
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /admin/categoryUpdate 编辑分类
+ * @apiName /admin/categoryUpdate
+ * @apiGroup admin
+ * @apiParam { Number } id 要修改的分类id
+ * @apiParam { String } name 修改后的分类名称
+ * @apiSampleRequest /admin/categoryUpdate
+ */
+router.post('/categoryUpdate',(req,res,next)=>{
+  let {name,id} = req.body;
+  let sql = 'UPDATE `category` SET `name`=? WHERE id=?';
+  db.query(sql,[name,id])
+  .then(results=>{
+    res.json({
+      status:true,
+      data:results
+    })
+  })
+  .catch(message=>{
+    res.json({
+      status:false,
+      data:message
+    })
+  })
+})
+/**
+ * @api {post} /admin/articleAdd 新增文章
+ * @apiName /admin/articleAdd
+ * @apiGroup admin
+ * @apiParam { Number } cid 二级分类id
+ * @apiParam { String } title 文章标题
+ * @apiParam { String } description 文章描述
+ * @apiParam { String } content 文章主体
+ * @apiParam { String } images 文章图片，多张图片使用','连接，单张图片不加','
+ * @apiParam { String } link 文章链接/来源
+ * @apiSampleRequest /admin/articleAdd
+ */
+router.post('/articleAdd',(req,res,next)=>{
+  let {cid,title,description,content,images,link} = req.body;
+  let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?)';
+  db.query(sql,[cid,title,description,content,images,link])
+    .then(results=>{
+      res.json({
+        status:true,
+        data:''
+      })
+    })
+    .catch(message=>{
+      res.json({
+        status:false,
+        data:message
+      })
+    })
+})
 // 脚，固定写法
 module.exports = router;
