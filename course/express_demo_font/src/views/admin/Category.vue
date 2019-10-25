@@ -34,14 +34,6 @@
         <el-button type="primary" @click="updateConfigHandle">更 新</el-button>
       </span>
     </el-dialog>
-    <!-- 删除dialog -->
-    <el-dialog title="删除" :visible.sync="toggle.isDeleteDialog" width="30%">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="toggle.isDeleteDialog = false">取 消</el-button>
-        <el-button type="primary" @click="deleteConfigHandle">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -62,11 +54,10 @@ export default {
         name: "",
         pId: ""
       },
-      formUpdate: {
-        name: ""
-      },
+      formUpdate: {},
       id: "",
-      currentNodeData: ""
+      currentNodeData: "",
+      currentNode: ""
     };
   },
   methods: {
@@ -104,11 +95,11 @@ export default {
       }
       this.$axios
         .post("/admin/categoryAdd", {
-          pId:this.formAdd.id,
-          name:this.formAdd.name
+          pId: this.formAdd.id,
+          name: this.formAdd.name
         })
         .then(({ data: res }) => {
-          console.log(res);
+          if(!res.status) return this.$message.error('添加失败')
           this.toggle.isAddDialog = false;
           // 添加子节点
           let data = this.currentNodeData;
@@ -123,17 +114,44 @@ export default {
     // 编辑
     showUpdateDialog(node, data) {
       this.toggle.isUpdateDialog = true;
+      this.formUpdate = { ...data };
+      // 转存node节点
+      this.currentNode = node;
     },
     updateConfigHandle() {
-      this.toggle.isUpdateDialog = false;
+      this.$axios
+        .post("/admin//categoryUpdate", {
+          id: this.formUpdate.id,
+          name: this.formUpdate.name
+        })
+        .then(({ data: res }) => {
+          if(!res.status) return this.$message.error('更新失败');
+          // 更新节点
+          this.currentNode.data = { ...this.formUpdate };
+          this.toggle.isUpdateDialog = false;
+        });
     },
     // 删除
     showDeleteDialog(node, data) {
-      this.toggle.isDeleteDialog = true;
+      this.$msgbox({
+        type: "warning",
+        title: "",
+        message: `"此操作将永久删除 ${data.name} , 是否继续?"`
+      }).then(() => {
+        this.$axios.post('/admin/categoryDel',{
+          id:data.id
+        })
+        .then(({data:res})=>{
+          if(res.status){
+            node.remove();
+          }else{
+            this.$message.success('删除失败');
+          }
+          
+        })
+        console.log(data.id)
+      });
     },
-    deleteConfigHandle() {
-      this.toggle.isDeleteDialog = false;
-    }
   },
   created() {
     this.loadNode();

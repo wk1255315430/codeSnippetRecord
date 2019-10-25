@@ -122,6 +122,14 @@
      ```mysql
      SELECT * FROM `tablename` WHERE `filed`= value
      ```
+     
+   - 关联查询
+
+     ```mysql
+     SELECT * FROM `tablename1` T1 JOIN `tablename2` T2 on T1.pid = T2.id
+     ```
+
+     
 
 6. ##### 存储过程函数
 
@@ -263,3 +271,17 @@ $$
 DELIMITER ;
 ```
 
+老李的购物车查询
+
+```mysql
+SELECT T1.id,T1.pid,T1.count,T1.shoppingTime,T2.name,T2.avatar,T2.price FROM
+(
+    (SELECT * FROM `dt_cart` WHERE `name` = _uName) T1
+    INNER JOIN
+    `dt_product` T2
+    ON T1.pid = T2.id
+);
+
+```
+
+> 先筛选再关联的原则 减少数据库操作
