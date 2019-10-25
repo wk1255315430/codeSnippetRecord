@@ -141,7 +141,7 @@ router.post('/categoryAdd', (req, res, next) => {
     .then(results => {
       res.json({
         status: true,
-        data: '',
+        data: results.insertId,
       })
     })
     .catch(message => {

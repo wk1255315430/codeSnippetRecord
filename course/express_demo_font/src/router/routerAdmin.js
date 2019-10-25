@@ -17,7 +17,7 @@ export default [
       {
         path: "/admin/category",
         name: "category",
-        meta: { requiredAuth: true },
+        meta: { requiredAuth: true, keepAlive: true },
         component: () =>
           import(/* webpackChunkName: "admin" */ "@/views/admin/Category.vue")
       }

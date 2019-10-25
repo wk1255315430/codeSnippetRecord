@@ -59,13 +59,14 @@ export default {
         isDeleteDialog: false
       },
       formAdd: {
-        name: ""
+        name: "",
+        pId: ""
       },
       formUpdate: {
         name: ""
       },
-      pId: "",
-      id: ""
+      id: "",
+      currentNodeData: ""
     };
   },
   methods: {
@@ -87,10 +88,12 @@ export default {
     // 添加
     showAddDialog(node, data) {
       this.toggle.isAddDialog = true;
-      this.pId = data.id;
+      this.formAdd.id = data.id;
+      this.formAdd.pId = data.pId;
+      // 转存data
+      this.currentNodeData = data;
     },
     addConfigHandle() {
-      this.toggle.isAddDialog = false;
       let regArr = [{ type: "", value: this.formAdd.name, des: "类名" }];
       for (let i = 0; i < regArr.length; i++) {
         let flag = regular.regexCheck(regArr[i]);
@@ -101,11 +104,20 @@ export default {
       }
       this.$axios
         .post("/admin/categoryAdd", {
-          name: this.formAdd.name,
-          pId: this.pId
+          pId:this.formAdd.id,
+          name:this.formAdd.name
         })
         .then(({ data: res }) => {
           console.log(res);
+          this.toggle.isAddDialog = false;
+          // 添加子节点
+          let data = this.currentNodeData;
+          let newChild = { ...this.formAdd, id: res.data };
+          if (!data.children) {
+            this.$set(data, "children", []);
+          }
+          console.log(newChild, "newChild");
+          data.children.push(newChild);
         });
     },
     // 编辑
