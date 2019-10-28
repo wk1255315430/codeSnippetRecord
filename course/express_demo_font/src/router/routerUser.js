@@ -8,8 +8,8 @@ export default [
       import(/* webpackChunkName: "about" */ "@/views/users/Home.vue")
   },
   {
-    path: "/test",
-    name: "test",
+    path: "/article/:id",
+    name: "article",
     component: () =>
       import(/* webpackChunkName: "about" */ "@/views/users/Markdown.vue")
   }

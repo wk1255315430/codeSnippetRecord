@@ -13,7 +13,7 @@
     </el-header>
     <el-container class="minusHeight">
       <el-aside width="15%" style="background-color: rgb(238, 241, 246)">
-        <el-menu :default-openeds="['1']" @select="handleSelect">
+        <el-menu :default-active="activeIndex" :default-openeds="['1']" @select="handleSelect">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-menu"></i>玉盘珍羞
@@ -73,11 +73,13 @@ export default {
       address: "上海市普陀区金沙江路 1518 弄"
     };
     return {
-      tableData: Array(20).fill(item)
+      tableData: Array(20).fill(item),
+      activeIndex:"/admin/article",
     };
   },
   methods: {
     handleSelect(key, keyPath) {
+      this.activeIndex = key;
       if (this.$route.path === key) return;
       this.$router.push({
         path: key

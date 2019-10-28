@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="金樽清酒">
         <el-select
-          v-model="form.cate_1st"
+          v-model="cate.cate_1st"
           placeholder="请选择"
           @change="cateChangeHandle_1st"
           prop="cate_1st"
@@ -18,7 +18,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-        <el-select v-model="form.cate_2nd" placeholder="请选择" prop="cate_2nd">
+        <el-select v-model="form.cid" placeholder="请选择" prop="cate_2nd">
           <el-option
             v-for="item in dataCategory_2st"
             :key="item.id"
@@ -101,11 +101,13 @@ export default {
           }
         ]
       },
-      dataCategory_lst: [{ id: 1, name: "停杯" }, { id: 2, name: "投箸" }],
-      dataCategory_2st: [{ id: 1, name: "拔剑" }, { id: 2, name: "四顾" }],
+      dataCategory_lst: "",
+      dataCategory_2st: "",
+      cate: {
+        cate_1st: ""
+      },
       form: {
-        cate_1st: "",
-        cate_2nd: "",
+        cid: "",
         title: "",
         description: "",
         content: "",
@@ -114,6 +116,19 @@ export default {
     };
   },
   components: {},
+  computed: {
+    cate_1st() {
+      return this.cate.cate_1st;
+    }
+  },
+  watch: {
+    cate_1st(newValue, oldValue) {
+      this.getInitCate_2st(newValue);
+    }
+  },
+  created() {
+    this.getInitCate_1st();
+  },
   methods: {
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
@@ -140,30 +155,54 @@ export default {
           console.log(res);
         });
     },
+    getInitCate_1st() {
+      this.$axios
+        .post("/admin/category", {
+          pId: 0
+        })
+        .then(({ data: res }) => {
+          if (res.status) {
+            this.dataCategory_lst = res.data;
+          }
+        });
+    },
+    getInitCate_2st(id) {
+      this.$axios
+        .post("/admin/category", {
+          pId: id
+        })
+        .then(({ data: res }) => {
+          if (res.status) {
+            this.dataCategory_2st = res.data;
+          }
+        });
+    },
     cateChangeHandle_1st() {
       if (this.form.cate_2nd) {
         this.form.cate_2nd = "";
       }
-      // TODO:请求数据
-      // this.Category_2st();
     },
     // TODO:提交重置
     submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios.post('/admin/articleAdd',{
+            ...this.form
+          })
+          .then(({data:res})=>{
+            console.log(res)
+          })
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
   }
 };
 </script>
 
-<style lang="stylus" scoped>
-</style>
+<style lang="stylus" scoped></style>

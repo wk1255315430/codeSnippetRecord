@@ -4,7 +4,7 @@
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <span>
-          <el-button type="text" size="mini" @click.stop="showAddDialog(node,data)">添加</el-button>
+          <el-button type="text" size="mini" @click.stop="showAddDialog(node,data)" v-if="node.level < 2">添加</el-button>
           <el-button type="text" size="mini" @click.stop="showUpdateDialog(node,data)">编辑</el-button>
           <el-button type="text" size="mini" @click.stop="showDeleteDialog(node,data)">删除</el-button>
         </span>

@@ -76,9 +76,10 @@ router.post('/articles', function (req, res, next) {
  */
 router.post('/articleById', (req, res, next) => {
   let { id } = req.body;
-  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` FROM article WHERE id = ?'
+  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords` FROM article WHERE id = ?'
   db.query(sql, [id])
     .then(results => {
+      console.log(results)
       res.json({
         status: true,
         data: results[0]
@@ -111,5 +112,49 @@ router.post('/socket',(req,res,next)=>{
   //   console.log('redirect config is empty');
   // }
 })
-
+/**
+ * @api {post} /user/keyWord 获取所有二级分类
+ * @apiName /user/keyWord
+ * @apiGroup User
+ * @apiSampleRequest /user/keyWord
+ */
+router.get('/keyWords',(req,res,next)=>{
+  let sql = "SELECT id,`name`	FROM category WHERE pid!=0";
+  db.query(sql,[])
+  .then(results=>{
+    res.json({
+      status:true,
+      data:results
+    })
+  })
+  .catch(message=>{
+    res.json({
+      status:false,
+      data:message
+    })
+  })
+})
+/**
+ * @api {post} /user/keyWord 获取所有二级分类
+ * @apiName /user/keyWord
+ * @apiGroup User
+ * @apiSampleRequest /user/keyWord
+ */
+router.post('/relationArticle',(req,res,next)=>{
+  let {keyWords} = req.body;
+  let sql = 'select id,title from article where concat(title,description,content) REGEXP ?';
+  db.query(sql,[keyWords])
+  .then(results=>{
+    res.json({
+      status:true,
+      data:results
+    })
+  })
+  .catch(message=>{
+    res.json({
+      status:false,
+      data:message
+    })
+  })
+})
 module.exports = router;

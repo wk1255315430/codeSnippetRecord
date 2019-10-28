@@ -284,4 +284,4 @@ SELECT T1.id,T1.pid,T1.count,T1.shoppingTime,T2.name,T2.avatar,T2.price FROM
 
 ```
 
-> 先筛选再关联的原则 减少数据库操作
+> 先筛选再关联的原则 减少数据库操作。INNER JOIN 与 JOIN 是相同的。

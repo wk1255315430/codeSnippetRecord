@@ -219,9 +219,9 @@ router.post('/categoryUpdate',(req,res,next)=>{
  * @apiSampleRequest /admin/articleAdd
  */
 router.post('/articleAdd',(req,res,next)=>{
-  let {cid,title,description,content,images,link} = req.body;
-  let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?)';
-  db.query(sql,[cid,title,description,content,images,link])
+  let {cid,title,description,content,images,link,keywords} = req.body;
+  let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`,`keywords`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?,?)';
+  db.query(sql,[cid,title,description,content,images,link,keywords])
     .then(results=>{
       res.json({
         status:true,

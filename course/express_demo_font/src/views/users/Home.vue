@@ -51,8 +51,7 @@ export default {
     },
     goToDes(id) {
       this.$router.push({
-        path: "/test",
-        query: { id: id }
+        path: `/article/${id}`,
       });
     },
   },
