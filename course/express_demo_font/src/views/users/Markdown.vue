@@ -30,9 +30,17 @@
           <el-button size="mini" plain v-for="item in keyWordsInitData" :key="item.id">{{item.name}}</el-button>
         </div>
         <div class="recommendArticle">
-          <el-link :underline="false">微信小程序使用字体图标</el-link>
-          <el-divider></el-divider>
-          <el-link :underline="false">微信小程序使用字体图标</el-link>
+          <p>相关文章</p>
+          <div
+            class="li"
+            @click="goToDes(item.id)"
+            v-for="item in relationData"
+            :key="item.id"
+            v-show="Number($route.params.id) !== item.id"
+          >
+            <el-link :underline="false">{{item.title}}</el-link>
+            <el-divider></el-divider>
+          </div>
         </div>
       </div>
     </el-main>
@@ -61,6 +69,16 @@ export default {
       keyWordsInitData: "",
       relationData: ""
     };
+  },
+  beforeRouteEnter(to, fromy, next) {
+    next(vm => {
+      vm.getInitData(to.params.id)
+      next();
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.getInitData(to.params.id)
+    next();
   },
   methods: {
     getInitData(id) {
@@ -105,6 +123,12 @@ export default {
             this.relationData = res.data;
           }
         });
+    },
+    goToDes(id) {
+      // 相关文章点击切换文章
+      this.$router.replace({
+        path: `/article/${id}`
+      });
     }
   },
   created() {
@@ -155,18 +179,24 @@ export default {
         .el-button
           margin: 0.1em
       .recommendArticle
-        height: 100px
-        border: 1px solid red
         margin-top: 1rem
+        padding: 0.5rem 0.5rem 1rem 0.5rem
         font-size: 1.4rem
         display: flex
         flex-direction: column
-        .el-link
-          display: -webkit-box !important
-          -webkit-box-orient: vertical
-          -webkit-line-clamp: 2
-          overflow: hidden
-          -webkit-box-align: start 
-          -moz-box-align:start
-          padding 0 .5rem
+        background-color: #ffffff
+        .li
+          &:last-child
+            .el-divider
+              display: none
+          .el-link
+            display: -webkit-box !important
+            -webkit-box-orient: vertical
+            -webkit-line-clamp: 2
+            overflow: hidden
+            -webkit-box-align: start
+            -moz-box-align: start
+            padding: 0 0.5rem
+          .el-divider
+            margin: 0
 </style>
