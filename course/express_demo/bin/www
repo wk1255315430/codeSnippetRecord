@@ -53,8 +53,8 @@ io.on('connection', function (socket) {
   // 当关闭连接后触发 disconnect 事件
   socket.on('disconnect', function () {
     let name = socket.id;
-    console.log('有用户退出')
     if(names.includes(name)){
+      console.log('有用户退出')
       names.splice(names.indexOf(name),1)
       console.log(names,'names')
     }

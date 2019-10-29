@@ -150,8 +150,6 @@ export default {
     this.sockets.subscribe("reId", data => {
       that.socketId = data.msg;
     });
-    // this.sockets.unsubscribe('reId');
-    // this.sockets.unsubscribe('relogin');
   }
 };
 </script>
