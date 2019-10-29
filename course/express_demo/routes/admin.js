@@ -54,10 +54,10 @@ router.put("/upload/articleImg", upload.single("file"), function (req, res, next
   }
   //判读图片尺寸
   var width = images(req.file.buffer).width();
-  if (width < 300 || width > 1500) {
+  if (width < 300 || width > 3000) {
     res.status(400).json({
       status: false,
-      msg: "图片尺寸300-1500，请重新处理!"
+      msg: "图片尺寸300-3000，请重新处理!"
     });
     return;
   }
@@ -219,9 +219,9 @@ router.post('/categoryUpdate',(req,res,next)=>{
  * @apiSampleRequest /admin/articleAdd
  */
 router.post('/articleAdd',(req,res,next)=>{
-  let {cid,title,description,content,images,link,keywords} = req.body;
-  let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`,`keywords`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?,?)';
-  db.query(sql,[cid,title,description,content,images,link,keywords])
+  let {cid,title,description,content,images,link,keyWords} = req.body;
+  let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`,`keyWords`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?,?)';
+  db.query(sql,[cid,title,description,content,images,link,keyWords])
     .then(results=>{
       res.json({
         status:true,

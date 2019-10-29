@@ -34,22 +34,32 @@ io.on('connection', function (socket) {
     if (names.indexOf(name) === -1) {
       names.push(name)
     }
-    console.log(names,'names')
+    console.log(names, 'names')
     // 在服务器再建立个客户端，来发送数据给指定用户
     // 发送数据
     socket.emit('reId', {
       msg: name
-    });  
+    });
   });
   socket.on('sayTo', function (data) {
     let toId = data.toId;
-      let toSocket = _.findWhere(io.sockets.sockets, { id: toId });
-      if(toSocket){
-        toSocket.emit('relogin', 1);
-      }else{
-        console.log('error:',`'${toId}用户已离开socket'`)
-      }
+    let toSocket = _.findWhere(io.sockets.sockets, { id: toId });
+    if (toSocket) {
+      toSocket.emit('relogin', 1);
+    } else {
+      console.log('error:', `'${toId}用户已离开socket'`)
+    }
   });
+  // 当关闭连接后触发 disconnect 事件
+  socket.on('disconnect', function () {
+    let name = socket.id;
+    console.log('有用户退出')
+    if(names.includes(name)){
+      names.splice(names.indexOf(name),1)
+      console.log(names,'names')
+    }
+  });
+
 });
 /**
  * Listen on provided port, on all network interfaces.

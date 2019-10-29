@@ -24,12 +24,18 @@
           <p @click="linkSocket">连接</p>
           <input type="text" v-model="socketId" />
         </div>
+        <!-- <div class="gb">
+          <el-avatar :src="avatar.nb"></el-avatar>
+          <span>100赞</span>
+          <el-avatar :src="avatar.break" class="last"></el-avatar>
+          <span>20踩</span>
+        </div> -->
       </div>
       <div class="rightWrap">
         <div class="recommendKey">
           <el-button size="mini" plain v-for="item in keyWordsInitData" :key="item.id">{{item.name}}</el-button>
         </div>
-        <div class="recommendArticle">
+        <div class="recommendArticle" v-if="relationData.length > 1">
           <p>相关文章</p>
           <div
             class="li"
@@ -66,18 +72,16 @@ export default {
         backgroundImage: "url(" + require("../../assets/dot.png") + ")",
         backgroundRepeat: "repeat"
       },
+      avatar:{
+        break:require("../../assets/break.png"),
+        nb:require("../../assets/nb.png")
+      },
       keyWordsInitData: "",
-      relationData: ""
+      relationData: []
     };
   },
-  beforeRouteEnter(to, fromy, next) {
-    next(vm => {
-      vm.getInitData(to.params.id)
-      next();
-    });
-  },
   beforeRouteUpdate(to, from, next) {
-    this.getInitData(to.params.id)
+    this.getInitData(to.params.id);
     next();
   },
   methods: {
@@ -166,8 +170,25 @@ export default {
       background-color: #ffffff
       width: 70%
       flex-shrink: 0
+      position relative
       .md-body
         padding: 2%
+      .gb
+        display inline-flex
+        flex-direction column
+        position absolute
+        bottom 20%
+        right -6rem
+        .el-avatar
+          background none
+          width 30px
+          height 30px
+          border-radius 0
+          cursor pointer
+        .last
+          margin-top 1rem
+        span
+          text-align center
     .rightWrap
       margin-left: 1%
       flex-grow: 1

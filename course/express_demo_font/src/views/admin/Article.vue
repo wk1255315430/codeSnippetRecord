@@ -44,10 +44,6 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">直挂</el-button>
-        <el-button @click="resetForm('form')">归去</el-button>
-      </el-form-item>
-      <el-form-item>
         <el-tag
           :key="tag"
           v-for="tag in dynamicTags"
@@ -65,6 +61,10 @@
           @blur="handleInputConfirm"
         ></el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加关键字</el-button>
+      </el-form-item>
+       <el-form-item>
+        <el-button type="primary" @click="submitForm('form')">直挂</el-button>
+        <el-button @click="resetForm('form')">归去</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -111,7 +111,7 @@ export default {
       },
       rules: {
         title: [
-          { required: true, message: "不能为空", trigger: "blur" },
+          { required: false, message: "不能为空", trigger: "blur" },
           {
             min: 0,
             max: 1000,
