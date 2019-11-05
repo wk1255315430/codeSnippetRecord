@@ -115,18 +115,24 @@ router.post('/articleView', (req, res, next) => {
     })
 })
 /**
- * @api {post} /user/articleHot 获取热门文章
+ * @api {post} /user/articleHot 获取3/7/30天内的热门文章
  * @apiName /user/articleHot
  * @apiGroup User
- * @apiParam { Number } id 文章id
+ * @apiParam { Number } day 天数
+ * @apiParam { Number } limit 非必传，默认为10
  * @apiSampleRequest /user/articleHot
  */
 router.post('/articleHot',(req,res,next)=>{
-  db.query('SELECT `id`,`title`,`description` FROM `article` ORDER BY	`count` DESC',[])
+  let {day,limit} = req.body;
+  if(!limit){
+    limit = 10
+  }
+  let sql = 'SELECT `id`,`title`,`description` FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY	`count` DESC LIMIT ?';
+  db.query(sql,[day,limit])
     .then(results=>{
       res.json({
         status:true,
-        data:''
+        data:results
       })
     })
     .catch(message=>{
