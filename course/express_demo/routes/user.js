@@ -79,7 +79,6 @@ router.post('/articleById', (req, res, next) => {
   let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords` FROM article WHERE id = ?'
   db.query(sql, [id])
     .then(results => {
-      console.log(results)
       res.json({
         status: true,
         data: results[0]
@@ -92,12 +91,57 @@ router.post('/articleById', (req, res, next) => {
       })
     })
 })
-router.post('/socket',(req,res,next)=>{
-  let {toId} = req.body;
+/**
+ * @api {post} /user/articleView 记录查看次/人数
+ * @apiName /user/articleView
+ * @apiGroup User
+ * @apiParam { Number } id 文章id
+ * @apiSampleRequest /user/articleView
+ */
+router.post('/articleView', (req, res, next) => {
+  let { id } = req.body;
+  db.query('CALL article_hot(?)', [id])
+    .then(results => {
+      res.json({
+        status: true,
+        data: ''
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: true,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /user/articleHot 获取热门文章
+ * @apiName /user/articleHot
+ * @apiGroup User
+ * @apiParam { Number } id 文章id
+ * @apiSampleRequest /user/articleHot
+ */
+router.post('/articleHot',(req,res,next)=>{
+  db.query('SELECT `id`,`title`,`description` FROM `article` ORDER BY	`count` DESC',[])
+    .then(results=>{
+      res.json({
+        status:true,
+        data:''
+      })
+    })
+    .catch(message=>{
+      res.json({
+        status:false,
+        data:message
+      })
+    })
+})
+router.post('/socket', (req, res, next) => {
+  let { toId } = req.body;
   console.log(toId)
   res.json({
-    data:toId,
-    status:1111
+    data: toId,
+    status: 1111
   })
   // //连接本地服务
   // let io = require("socket.io-client");
@@ -118,43 +162,43 @@ router.post('/socket',(req,res,next)=>{
  * @apiGroup User
  * @apiSampleRequest /user/keyWord
  */
-router.get('/keyWords',(req,res,next)=>{
+router.get('/keyWords', (req, res, next) => {
   let sql = "SELECT id,`name`	FROM category WHERE pid!=0";
-  db.query(sql,[])
-  .then(results=>{
-    res.json({
-      status:true,
-      data:results
+  db.query(sql, [])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results
+      })
     })
-  })
-  .catch(message=>{
-    res.json({
-      status:false,
-      data:message
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
     })
-  })
 })
 /**
- * @api {post} /user/keyWord 获取所有二级分类
- * @apiName /user/keyWord
+ * @api {post} /user/relationArticle 获取相关文章
+ * @apiName /user/relationArticle
  * @apiGroup User
- * @apiSampleRequest /user/keyWord
+ * @apiSampleRequest /user/relationArticle
  */
-router.post('/relationArticle',(req,res,next)=>{
-  let {keyWords} = req.body;
+router.post('/relationArticle', (req, res, next) => {
+  let { keyWords } = req.body;
   let sql = 'select id,title from article where concat(title,description,content) REGEXP ?';
-  db.query(sql,[keyWords])
-  .then(results=>{
-    res.json({
-      status:true,
-      data:results
+  db.query(sql, [keyWords])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results
+      })
     })
-  })
-  .catch(message=>{
-    res.json({
-      status:false,
-      data:message
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
     })
-  })
 })
 module.exports = router;

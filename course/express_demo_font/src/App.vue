@@ -13,4 +13,7 @@ body, html
   .clearfix::before
     content: ''
     display: table
+#nprogress .bar {
+      background: rgb(76, 164, 214) !important;
+    }
 </style>

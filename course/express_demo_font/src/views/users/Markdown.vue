@@ -29,9 +29,24 @@
           <span>100赞</span>
           <el-avatar :src="avatar.break" class="last"></el-avatar>
           <span>20踩</span>
-        </div> -->
+        </div>-->
       </div>
       <div class="rightWrap">
+        <div class="inputWrap">
+          <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="search"
+            :fetch-suggestions="querySearch"
+            placeholder="搜索一下"
+            @select="handleSelect"
+          >
+            <i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick"></i>
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+              <span class="addr">{{ item.address }}</span>
+            </template>
+          </el-autocomplete>
+        </div>
         <div class="recommendKey">
           <el-button size="mini" plain v-for="item in keyWordsInitData" :key="item.id">{{item.name}}</el-button>
         </div>
@@ -72,12 +87,14 @@ export default {
         backgroundImage: "url(" + require("../../assets/dot.png") + ")",
         backgroundRepeat: "repeat"
       },
-      avatar:{
-        break:require("../../assets/break.png"),
-        nb:require("../../assets/nb.png")
+      avatar: {
+        break: require("../../assets/break.png"),
+        nb: require("../../assets/nb.png")
       },
       keyWordsInitData: "",
-      relationData: []
+      relationData: [],
+      restaurants: [],
+      search: ""
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -97,6 +114,13 @@ export default {
               this.getRelationArticleData(res.data.keyWords);
           }
         });
+    },
+    //记录查看次数
+    async setViewCount(id) {
+      let { data: res } = await this.$axios.post("user/articleView", {
+        id: id
+      });
+      sessionStorage.setItem("fskajsusu", true);
     },
     linkSocket() {
       this.$socket.emit("login", {
@@ -133,6 +157,28 @@ export default {
       this.$router.replace({
         path: `/article/${id}`
       });
+    },
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return restaurant => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
+    handleIconClick(ev) {
+      console.log(this.search);
     }
   },
   created() {
@@ -142,6 +188,10 @@ export default {
     let id = this.$route.params.id;
     this.id = id;
     this.getInitData(id);
+    let flag = sessionStorage.getItem("fskajsusu");
+    if (!flag) {
+      this.setViewCount(id);
+    }
     //接收服务端的信息
     this.sockets.subscribe("relogin", data => {
       console.log(data, "relogin");
@@ -150,6 +200,9 @@ export default {
     this.sockets.subscribe("reId", data => {
       that.socketId = data.msg;
     });
+  },
+  mounted() {
+    // this.restaurants = this.loadAll();
   }
 };
 </script>
@@ -168,25 +221,25 @@ export default {
       background-color: #ffffff
       width: 70%
       flex-shrink: 0
-      position relative
+      position: relative
       .md-body
         padding: 2%
       .gb
-        display inline-flex
-        flex-direction column
-        position absolute
-        bottom 20%
-        right -6rem
+        display: inline-flex
+        flex-direction: column
+        position: absolute
+        bottom: 20%
+        right: -6rem
         .el-avatar
-          background none
-          width 30px
-          height 30px
-          border-radius 0
-          cursor pointer
+          background: none
+          width: 30px
+          height: 30px
+          border-radius: 0
+          cursor: pointer
         .last
-          margin-top 1rem
+          margin-top: 1rem
         span
-          text-align center
+          text-align: center
     .rightWrap
       margin-left: 1%
       flex-grow: 1
@@ -218,4 +271,19 @@ export default {
             padding: 0 0.5rem
           .el-divider
             margin: 0
+      .el-autocomplete
+        width: 100%
+        margin-bottom: 1rem
+        .my-autocomplete
+          li
+            line-height: normal
+            padding: 7px
+            .name
+              text-overflow: ellipsis
+              overflow: hidden
+            .addr
+              font-size: 12px
+              color: #b4b4b4
+            .highlighted .addr
+              color: #ddd
 </style>

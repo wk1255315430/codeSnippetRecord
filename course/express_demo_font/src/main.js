@@ -8,6 +8,25 @@ import store from "./store";
 import VueSocketIO from "vue-socket.io";
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
+//引入nprogress
+import NProgress from "nprogress"; // 进度条
+import "nprogress/nprogress.css"; //这个样式必须引入
+// nprogress简单配置
+NProgress.inc(0.2);
+NProgress.configure({
+  easing: "ease",
+  speed: 500,
+  showSpinner: false
+});
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+});
+
+router.afterEach(() => {
+  NProgress.done();
+});
+
 Vue.use(
   new VueSocketIO({
     debug: true,
@@ -17,6 +36,7 @@ Vue.use(
   })
 );
 Vue.prototype.$axios = axios;
+Vue.prototype.$NProgress = NProgress;
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
 Vue.config.productionTip = false;

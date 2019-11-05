@@ -201,87 +201,105 @@
    ```
 
    - 课程登录
+   
+     ```mysql
+     CREATE DEFINER=`root`@`localhost` PROCEDURE `login`(
+     _email VARCHAR(20),_password VARCHAR(20),_nickname VARCHAR(20)
+     )
+     BEGIN
+     	DECLARE _name VARCHAR(255) DEFAULT NULL;
+     	DECLARE _count INT(255) DEFAULT 0;
+     	SELECT `name` INTO _name  FROM `users` WHERE `name` = _email;
+     	SELECT `count` INTO _count  FROM `users` WHERE `name` = _email;
+     	IF _name IS NULL then
+     	INSERT INTO `users`(`name`,`password`,`nickname`,`tel`,`created_at`,`updated_at`,`count`) VALUES(_email,_password,_nickname,null,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),_count);
+     		SELECT _email AS `name`, _password AS `password`;
+     	ELSE
+     		set _count = _count + 1;
+     		UPDATE `users` SET `count`= _count, `updated_at`= CURRENT_TIMESTAMP() WHERE `name` = _email;
+     		SELECT _count AS `count`;
+     	END IF;
+     	
+     END
+     ```
+   
+     
+   
+   - 老李的登录注册sql存储过程
+   
+     ```mysql
+     DROP PROCEDURE IF EXISTS `P_loginByAdminPwd`;
+     DELIMITER $$
+     CREATE PROCEDURE `P_loginByAdminPwd`
+     (
+      _account varchar(20),
+      _pwd varchar(20)
+     )
+     BEGIN-- 头尾固定，只改名字就行，主要是begin里面的代码
+      DECLARE _temp varchar(20) DEFAULT NULL;
+      SELECT `pwd` INTO _temp FROM `dt_adminuser` WHERE `name` = _account;
+      IF _temp IS NULL THEN
+       SELECT '用户名不存在。。' AS 'result';
+      ELSE
+       IF _temp = _pwd THEN
+        SELECT '' AS 'result';
+       ELSE
+        SELECT '密码错误。。' AS 'result';
+       END IF;
+      END IF;
+     END;
+     $$
+     DELIMITER ;
+     ```
+   
+     ```mysql
+     DROP PROCEDURE IF EXISTS `P_loginByPhone`;
+     DELIMITER $$
+     CREATE PROCEDURE `P_loginByPhone`
+     (
+      _phone varchar(20)
+     )
+     BEGIN-- 头尾固定，只改名字就行，主要是begin里面的代码
+      DECLARE _name varchar(20) DEFAULT NULL;-- 定义一个_name类型为varchar，初始值为null
+      SELECT `name` INTO _name FROM `dt_user` WHERE `phone` = _phone;
+      IF _name IS NULL THEN
+       INSERT INTO `dt_user`(`name`,`pwd`,`phone`) VALUES (_phone,'123',_phone);
+       SELECT _phone AS `name`;
+      ELSE
+       SELECT _name AS `name`;
+      END IF;
+     END;
+     $$
+     DELIMITER ;
+     ```
+   
+     
+   
+   - 老李的购物车查询
+   
+     ```mysql
+     SELECT T1.id,T1.pid,T1.count,T1.shoppingTime,T2.name,T2.avatar,T2.price FROM
+     (
+         (SELECT * FROM `dt_cart` WHERE `name` = _uName) T1
+         INNER JOIN
+         `dt_product` T2
+         ON T1.pid = T2.id
+     );
+     ```
+   
+     > 先筛选再关联的原则 减少数据库操作。INNER JOIN 与 JOIN 是相同的。
+   
+     
+   
+8. ##### 模糊搜索
 
-```mysql
-CREATE DEFINER=`root`@`localhost` PROCEDURE `login`(
-_email VARCHAR(20),_password VARCHAR(20),_nickname VARCHAR(20)
-)
-BEGIN
-	DECLARE _name VARCHAR(255) DEFAULT NULL;
-	DECLARE _count INT(255) DEFAULT 0;
-	SELECT `name` INTO _name  FROM `users` WHERE `name` = _email;
-	SELECT `count` INTO _count  FROM `users` WHERE `name` = _email;
-	IF _name IS NULL then
-	INSERT INTO `users`(`name`,`password`,`nickname`,`tel`,`created_at`,`updated_at`,`count`) VALUES(_email,_password,_nickname,null,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),_count);
-		SELECT _email AS `name`, _password AS `password`;
-	ELSE
-		set _count = _count + 1;
-		UPDATE `users` SET `count`= _count, `updated_at`= CURRENT_TIMESTAMP() WHERE `name` = _email;
-		SELECT _count AS `count`;
-	END IF;
-	
-END
-```
+   ```mysql
+   select id,title,content from article where concat(title,content) REGEXP '日|金|财报'
+   ```
 
-- 老李的登录注册sql存储过程
+   
 
-```
-DROP PROCEDURE IF EXISTS `P_loginByAdminPwd`;
-DELIMITER $$
-CREATE PROCEDURE `P_loginByAdminPwd`
-(
- _account varchar(20),
- _pwd varchar(20)
-)
-BEGIN-- 头尾固定，只改名字就行，主要是begin里面的代码
- DECLARE _temp varchar(20) DEFAULT NULL;
- SELECT `pwd` INTO _temp FROM `dt_adminuser` WHERE `name` = _account;
- IF _temp IS NULL THEN
-  SELECT '用户名不存在。。' AS 'result';
- ELSE
-  IF _temp = _pwd THEN
-   SELECT '' AS 'result';
-  ELSE
-   SELECT '密码错误。。' AS 'result';
-  END IF;
- END IF;
-END;
-$$
-DELIMITER ;
-```
+9. 
 
-```mysql
-DROP PROCEDURE IF EXISTS `P_loginByPhone`;
-DELIMITER $$
-CREATE PROCEDURE `P_loginByPhone`
-(
- _phone varchar(20)
-)
-BEGIN-- 头尾固定，只改名字就行，主要是begin里面的代码
- DECLARE _name varchar(20) DEFAULT NULL;-- 定义一个_name类型为varchar，初始值为null
- SELECT `name` INTO _name FROM `dt_user` WHERE `phone` = _phone;
- IF _name IS NULL THEN
-  INSERT INTO `dt_user`(`name`,`pwd`,`phone`) VALUES (_phone,'123',_phone);
-  SELECT _phone AS `name`;
- ELSE
-  SELECT _name AS `name`;
- END IF;
-END;
-$$
-DELIMITER ;
-```
 
-老李的购物车查询
 
-```mysql
-SELECT T1.id,T1.pid,T1.count,T1.shoppingTime,T2.name,T2.avatar,T2.price FROM
-(
-    (SELECT * FROM `dt_cart` WHERE `name` = _uName) T1
-    INNER JOIN
-    `dt_product` T2
-    ON T1.pid = T2.id
-);
-
-```
-
-> 先筛选再关联的原则 减少数据库操作。INNER JOIN 与 JOIN 是相同的。

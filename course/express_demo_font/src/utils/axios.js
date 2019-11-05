@@ -1,6 +1,5 @@
 import axios from "axios";
 import qs from "qs";
-
 axios.defaults.timeout = 20000; //响应时间
 // axios.defaults.headers["Content-Type"] =
 //   "application/x-www-form-urlencoded;charset=UTF-8"; //配置请求头
