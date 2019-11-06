@@ -3,7 +3,7 @@ export default [
   {
     path: "/",
     name: "home",
-    meta: { requiredAuth: true },
+    meta: { requiredAuth: true, keepAlive: true },
     component: () =>
       import(/* webpackChunkName: "about" */ "@/views/users/Home.vue")
   },
