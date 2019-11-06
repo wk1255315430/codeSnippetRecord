@@ -194,6 +194,7 @@ router.get('/keyWords', (req, res, next) => {
 /**
  * @api {post} /user/relationArticle 获取相关文章
  * @apiName /user/relationArticle
+ * @apiParam { String } keyWords 关键字
  * @apiGroup User
  * @apiSampleRequest /user/relationArticle
  */
@@ -201,6 +202,30 @@ router.post('/relationArticle', (req, res, next) => {
   let { keyWords } = req.body;
   let sql = 'select id,title from article where concat(title,description,content) REGEXP ?';
   db.query(sql, [keyWords])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results
+      })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+/**
+ * @api {post} /user/search 搜索文章
+ * @apiName /user/search
+ * @apiParam { String } queryString 搜索内容
+ * @apiGroup User
+ * @apiSampleRequest /user/search
+ */
+router.post('/search', (req, res, next) => {
+  let { queryString } = req.body;
+  let sql = "select id,title,content from article where concat(title,content) REGEXP ?";
+  db.query(sql, [queryString])
     .then(results => {
       res.json({
         status: true,

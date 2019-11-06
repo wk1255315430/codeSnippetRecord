@@ -32,18 +32,17 @@
         </div>-->
       </div>
       <div class="rightWrap">
-        <div class="inputWrap">
+        <div class="inputWrap" v-on:keyup.enter="handleIconClick">
           <el-autocomplete
             popper-class="my-autocomplete"
             v-model="search"
-            :fetch-suggestions="querySearch"
+            :fetch-suggestions="getSerchData"
             placeholder="搜索一下"
             @select="handleSelect"
           >
             <i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick"></i>
             <template slot-scope="{ item }">
-              <div class="name">{{ item.value }}</div>
-              <span class="addr">{{ item.address }}</span>
+              <div class="name">{{ item.title }}</div>
             </template>
           </el-autocomplete>
         </div>
@@ -93,7 +92,6 @@ export default {
       },
       keyWordsInitData: "",
       relationData: [],
-      restaurants: [],
       search: ""
     };
   },
@@ -158,18 +156,10 @@ export default {
         path: `/article/${id}`
       });
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
     createFilter(queryString) {
       return restaurant => {
         return (
-          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          restaurant.title.toLowerCase().indexOf(queryString.toLowerCase()) ===
           0
         );
       };
@@ -177,8 +167,19 @@ export default {
     handleSelect(item) {
       console.log(item);
     },
+    getSerchData(queryString, cb) {
+      this.$axios
+        .post("user/search", {
+          queryString: queryString
+        })
+        .then(({ data: res }) => {
+          if (res.status) {
+            cb(res.data);
+          }
+        });
+    },
     handleIconClick(ev) {
-      console.log(this.search);
+      // this.getSerchData(this.search);
     }
   },
   created() {
@@ -202,7 +203,7 @@ export default {
     });
   },
   mounted() {
-    // this.restaurants = this.loadAll();
+    // this.getSerchData();
   }
 };
 </script>
