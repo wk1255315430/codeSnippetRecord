@@ -224,7 +224,7 @@ router.post('/relationArticle', (req, res, next) => {
  */
 router.post('/search', (req, res, next) => {
   let { queryString } = req.body;
-  let sql = "select id,title,content from article where concat(title,content) REGEXP ?";
+  let sql = "select id,title from article where concat(title,content) REGEXP ?";
   db.query(sql, [queryString])
     .then(results => {
       res.json({

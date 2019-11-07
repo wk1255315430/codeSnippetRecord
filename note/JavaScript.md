@@ -33,8 +33,37 @@
    ```
 
    > 数组的某个位置是空位，与某个位置是`undefined`，是不一样的。如果是空位，使用数组的`forEach`方法、`for...in`结构、以及`Object.keys`方法进行遍历，空位都会被跳过。
-   >
-   > 
+   
+3. for...of + Object
+
+   ```javascript
+   function distinct(a, b) {
+       let arr = a.concat(b)
+       let result = []
+       let obj = {}
+   
+       for (let i of arr) {
+           if (!obj[i]) {
+               result.push(i)
+               obj[i] = 1
+           }
+       }
+   
+       return result
+   }
+   ```
+
+   > 数组去重首选。15W条测试数据16ms,150w条数据93ms
+
+4. new Set()
+
+   ```javascript
+   function distinct(a, b) {
+       return Array.from(new Set([...a, ...b]))
+   }
+   ```
+
+   > 数组去重次选。15W条测试数据57ms,150w条数据678ms
 
 ### 运算符
 

@@ -36,6 +36,7 @@
           <el-autocomplete
             popper-class="my-autocomplete"
             v-model="search"
+            :trigger-on-focus="false"
             :fetch-suggestions="getSerchData"
             placeholder="搜索一下"
             @select="handleSelect"
@@ -165,7 +166,7 @@ export default {
       };
     },
     handleSelect(item) {
-      console.log(item);
+      console.log(item.id);
     },
     getSerchData(queryString, cb) {
       this.$axios
@@ -174,6 +175,9 @@ export default {
         })
         .then(({ data: res }) => {
           if (res.status) {
+            if (!res.data.length) {
+              this.$message.error("未查询到相关文章");
+            }
             cb(res.data);
           }
         });
