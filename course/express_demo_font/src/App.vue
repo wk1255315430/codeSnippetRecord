@@ -18,4 +18,8 @@ body, html
     display: table
 #nprogress .bar
   background: rgb(76, 164, 214) !important
+.el-autocomplete-suggestion
+  width: auto !important
+.el-message
+  width: auto !important
 </style>

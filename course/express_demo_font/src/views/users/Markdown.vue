@@ -32,21 +32,6 @@
         </div>-->
       </div>
       <div class="rightWrap">
-        <div class="inputWrap" v-on:keyup.enter="handleIconClick">
-          <el-autocomplete
-            popper-class="my-autocomplete"
-            v-model="search"
-            :trigger-on-focus="false"
-            :fetch-suggestions="getSerchData"
-            placeholder="搜索一下"
-            @select="handleSelect"
-          >
-            <i class="el-icon-search el-input__icon" slot="suffix" @click="handleIconClick"></i>
-            <template slot-scope="{ item }">
-              <div class="name">{{ item.title }}</div>
-            </template>
-          </el-autocomplete>
-        </div>
         <div class="recommendKey">
           <el-button size="mini" plain v-for="item in keyWordsInitData" :key="item.id">{{item.name}}</el-button>
         </div>
@@ -92,8 +77,7 @@ export default {
         nb: require("../../assets/nb.png")
       },
       keyWordsInitData: "",
-      relationData: [],
-      search: ""
+      relationData: []
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -156,34 +140,6 @@ export default {
       this.$router.replace({
         path: `/article/${id}`
       });
-    },
-    createFilter(queryString) {
-      return restaurant => {
-        return (
-          restaurant.title.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
-      };
-    },
-    handleSelect(item) {
-      console.log(item.id);
-    },
-    getSerchData(queryString, cb) {
-      this.$axios
-        .post("user/search", {
-          queryString: queryString
-        })
-        .then(({ data: res }) => {
-          if (res.status) {
-            if (!res.data.length) {
-              this.$message.error("未查询到相关文章");
-            }
-            cb(res.data);
-          }
-        });
-    },
-    handleIconClick(ev) {
-      // this.getSerchData(this.search);
     }
   },
   created() {
@@ -276,19 +232,4 @@ export default {
             padding: 0 0.5rem
           .el-divider
             margin: 0
-      .el-autocomplete
-        width: 100%
-        margin-bottom: 1rem
-        .my-autocomplete
-          li
-            line-height: normal
-            padding: 7px
-            .name
-              text-overflow: ellipsis
-              overflow: hidden
-            .addr
-              font-size: 12px
-              color: #b4b4b4
-            .highlighted .addr
-              color: #ddd
 </style>
