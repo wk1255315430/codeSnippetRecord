@@ -73,15 +73,15 @@ export default {
       options: [
         {
           value: "3",
-          label: "3 天内"
+          label: "三日"
         },
         {
           value: "7",
-          label: "7 天内"
+          label: "一周"
         },
         {
           value: "30",
-          label: "30 天内"
+          label: "一月"
         },
         {
           value: "",

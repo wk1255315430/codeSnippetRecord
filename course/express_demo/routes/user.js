@@ -20,14 +20,14 @@ db.query(temSql)
  * @apiSampleRequest /user/login
  */
 router.post('/login', function (req, res, next) {
-  let { email, emailCode, nickname } = req.body;
-  console.log(req.body);
-  let sql = 'CALL login(?,?,?)';
-  db.query(sql, [email, emailCode, nickname])
+  let { email, emailCode, nickname} = req.body;
+  let ip = req.clientIp;
+  let sql = 'CALL login(?,?,?,?)';
+  db.query(sql, [email, emailCode, nickname, ip])
     .then(results => {
       res.json({
         status: true,
-        data: results[0]
+        data: results[0],
       })
     })
     .catch(message => {
@@ -56,7 +56,7 @@ router.post('/articles', function (req, res, next) {
       res.json({
         status: true,
         data: results,
-        count: articleCount
+        count: articleCount,
       })
     })
     .catch(message => {
