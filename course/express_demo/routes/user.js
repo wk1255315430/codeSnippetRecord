@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 //数据库
 var db = require('../config/mysql')
+var nodemailer = require('../config/mailer')
 let articleCount;
 let temSql = 'select count(*) from article';
 db.query(temSql)
@@ -20,7 +21,7 @@ db.query(temSql)
  * @apiSampleRequest /user/login
  */
 router.post('/login', function (req, res, next) {
-  let { email, emailCode, nickname} = req.body;
+  let { email, emailCode, nickname } = req.body;
   let ip = req.clientIp;
   let sql = 'CALL login(?,?,?,?)';
   db.query(sql, [email, emailCode, nickname, ip])

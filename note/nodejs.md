@@ -49,7 +49,11 @@
 
 ##### nodemailer 
 
-> 邮件发送模块
+> 邮件发送模块，到达上限smtp限制登录，`qq`:52  `163`:76 ,到达上限将smtp将限制登录，发送邮箱将收到邮件提醒
+>
+> ```
+> 454 4.7.0 Too many login attempts, please try again later. l33sm4798981pgb.79 - gsmtp //到达52
+> ```
 
 ##### request 
 
@@ -62,6 +66,10 @@
 ##### multer
 
 > 用于上传文件
+
+##### request-ip
+
+> 获取客户端ip
 
 ```vue
 #vue
