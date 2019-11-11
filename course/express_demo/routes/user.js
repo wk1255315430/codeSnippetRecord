@@ -77,7 +77,7 @@ router.post('/articles', function (req, res, next) {
  */
 router.post('/articleById', (req, res, next) => {
   let { id } = req.body;
-  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords` FROM article WHERE id = ?'
+  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords`,`content_type` FROM article WHERE id = ?'
   db.query(sql, [id])
     .then(results => {
       res.json({

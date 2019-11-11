@@ -3,7 +3,8 @@
     <Header />
     <el-main>
       <div class="markdown">
-        <markdown-it-vue class="md-body" :content="content" />
+        <markdown-it-vue v-if="content_type === 1" class="md-body" :content="content" />
+        <div v-else v-html="content"></div>
         <div class="des">
           <p>
             版权声明：本文为博主原创文章，遵循
@@ -77,7 +78,8 @@ export default {
         nb: require("../../assets/nb.png")
       },
       keyWordsInitData: "",
-      relationData: []
+      relationData: [],
+      content_type:'',
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -92,6 +94,7 @@ export default {
         })
         .then(({ data: res }) => {
           if (res.status) {
+            this.content_type = res.data.content_type
             this.content = res.data.content;
             if (res.data.keyWords)
               this.getRelationArticleData(res.data.keyWords);
