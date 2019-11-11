@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' *;script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; media-src *">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <!-- 引入deviceinfo样式 -->
+    <!--<link rel="stylesheet" href="//resource.haier.net/download/mall/uplusApp/uplusH5/deviceInfo/common/deviceinfo.css">-->
+    <style>*:not(input):not(textarea){-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}</style>
+    <style>body{padding:0;margin:0}#root{background-color: #fff}</style>
+<!--
+      <style>.loading-wrap{position:absolute;z-index:-200;width:100%;background-color: #fff;}.loading-wrap .banner{position:relative;background-color:#eee;text-align:center;height:160px;z-index:3;margin-bottom:25px}.loading-wrap .banner .device-circle{top:68px;left:50%;background-size:cover;width:110px;height:110px;margin-left:-55px;background-color:#f5f5f5;border-radius:50%;position:relative}.loading-wrap .icon-switch-wrap{border-bottom:1px solid #dfdfdf;height:200px}.loading-wrap .icon-switch{color:#888;text-align:center;height:50px;margin:10px 0}.loading-wrap .icon-switch .icon{width:50px;height:50px;margin:0 auto 5px;background:#eee;border-radius:100%;position:relative}.loading-wrap .text{width:40px;height:16px;background-color:#eee;margin:0 auto 5px;position:relative}.loading-wrap .float-left-25{float:left;width:25%}.loading-wrap .order-wrap{margin:30px}.loading-wrap .order{height:40px;background-color:#eee;margin:20px 0}</style>
+-->
+    <title></title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!-- deviceinfo -->
+    <div class="info_wraper" id="info_wraper" style="display: none;"></div>
+  </body>
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?60b36c943192b9002d552795afe17d5f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <!-- 引入deviceinfo脚本 -->
+  <!--<script defer type="text/javascript" src="//resource.haier.net/download/mall/uplusApp/uplusH5/deviceInfo/common/deviceinfo.min.js"></script>-->
+</html>

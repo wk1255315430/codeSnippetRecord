@@ -1,0 +1,100 @@
+.mainPurifying{
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    padding-top: 15%;
+}
+.mainPurifying img{
+    width:106px;
+    margin: auto;
+}
+.mainPurifying p{
+    font-size:medium;
+    color:#99baf0;
+    margin-top:16px;
+}
+.purifyingFilterbtContainer{
+    position: absolute;
+    top:55%;
+    width:100%;
+}
+.purifyingFilterbtContainer>div{
+    width: 90%;
+    height: 40px;
+    margin-left: 5%;
+    color: #fff;
+    font-size: large;
+    line-height: 40px;
+    border-radius: 5px;
+    text-align: center;
+    background-image: url(images/buttonBg.png);
+    background-repeat: round;   
+}
+.confirm{
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0px;
+    left: 0px;
+}
+.confirm > div{
+    width:280px;
+    height: 120px;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -140px;
+    margin-top: -60px;
+    background-color: #fff;
+    z-index: 99;
+    border-radius: 8px;
+    text-align: center;
+}
+.confirm > div > p{
+    font-size: large;
+    margin: 15px 0px;
+    font-weight: 400;
+}
+.confirm > div >div{
+    margin-top: 20px;
+}
+.confirm > div >div >div{
+    display: inline-block;
+    width:110px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 20px;
+    //font-weight: bold;
+    font-size: larger;
+}
+.confirm > div >div >div:nth-child(1){
+    border:1px solid #e6e6e6;
+    margin-right: 15px;
+}
+.confirm > div >div >div:nth-child(2){
+    background-image: url(images/buttonBg.png);
+    background-repeat: round; 
+    margin-left: 15px;
+    color:#fff;
+}
+.success{
+    //background-color: #fff;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    //z-index: 200;
+    text-align: center;
+}
+.success img{
+    width:70px;
+    margin-top: 30%;
+}
+.success p{
+    width:100%;
+    margin-top: 20px;
+    font-size: large;
+    color: #99baf0;
+}

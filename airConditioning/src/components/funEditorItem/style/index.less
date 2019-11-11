@@ -1,0 +1,41 @@
+@import '../../style/themes/default';
+@import '../../style/mixins/util';
+
+.editorItem{
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background-color: #ffffff;
+  margin-top: 8px;
+  padding-left: 15px;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 1px rgba(230,230,230,0.5);
+  div {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #ffffff;
+    display: inline-block;
+    margin-right: 16px;
+    vertical-align:middle;
+    img {
+      //vertical-align:middle;
+      width: 36px;
+      //margin-right: 16px;
+      border-radius: 50%;
+      border: 0px;
+      position: relative;
+      top: -0.6px;
+      left: -0.6px;
+      //border: 1px solid #fff;
+    }
+  }
+
+  span {
+    vertical-align:middle;
+    color: #323232;
+    font-size: 14px;
+    font-family:@font-family-base;
+  }
+}

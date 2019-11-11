@@ -1,0 +1,58 @@
+<!--pages/user/user.wxml-->
+<!-- <text>pages/user/user.wxml</text> -->
+<!-- <view class='top1' wx:if="{{type!=1}}">
+  <view class='loginText'>Hi, 等你好久了!请登录~</view>
+  <view class='loginButBox' bindtap='login'>
+    <view class='loginButText'>登录</view>
+  </view>
+</view> -->
+<view class='top' bindtap="addUserInfo" wx:if="{{type==1}}">
+  <view class='top_left'>
+    <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+  </view>
+  <view class='topText'>
+    <view class='nickName'>
+      <view style='font-size: 32rpx;font-weight:600;'>{{userInfo.nickName}}</view>
+      <view class='shenfen' wx:if="{{userType==1 && userCheckState != 1 && userCheckState != 0}}"> 导游(未审核)</view>
+      <view class='shenfen' wx:if="{{userType==1 && userCheckState == 1}}">导游(审核通过)</view>
+      <view class='shenfen' wx:if="{{userType==1 && userCheckState == 0}}">导游(审核退回)</view>
+      <view class='shenfen' wx:if="{{userType==0}}">旅行社</view>
+      <!-- <view class='shenfen' wx:if="{{userType==2}}">宾馆、酒店</view> -->
+    </view>
+  </view>
+  <view class='topSet'>
+    <view>设置</view>
+    <view style='width:42rpx;height:42rpx;margin-top:0rpx;margin-left:16rpx;'>
+      <image src='../images/user/set.png' class='jt'></image>
+    </view>
+  </view>
+</view>
+<view class='body_1' hover-class='hoverStyle' hover-stay-time='50' bindtap="calling">
+  <view class='body_img'>
+    <image class="img" src='../images/user/keFuDianHua.png'></image>
+  </view>
+  <view class='body_menu'>客服电话</view>
+  <view class='body_jt'>
+    <image src='../images/user/jianTou01.png' class='jt'></image>
+  </view>
+</view>
+
+<view class='body_1' hover-class='hoverStyle' hover-stay-time='50' bindtap="Instructions">
+  <view class='body_img'>
+    <image class="img" src='../images/user/shiYongShuoMIng.png'></image>
+  </view>
+  <view class='body_menu'>使用说明</view>
+  <view class='body_jt'>
+    <image src='../images/user/jianTou01.png' class='jt'></image>
+  </view>
+</view>
+
+<view class='body_1' hover-class='hoverStyle' hover-stay-time='50' bindtap="idea">
+  <view class='body_img'>
+    <image class="img" src='../images/user/help.png'></image>
+  </view>
+  <view class='body_menu'>帮助与反馈</view>
+  <view class='body_jt'>
+    <image src='../images/user/jianTou01.png' class='jt'></image>
+  </view>
+</view>
