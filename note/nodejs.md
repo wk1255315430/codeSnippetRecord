@@ -71,6 +71,14 @@
 
 > 获取客户端ip
 
+##### puppeteer
+
+> 爬虫 可以饶过反爬虫规则，能够通过devtool控制headless模式的chrome或者chromium，它可以在headless模式下模拟任何的人为操作。
+
+##### cheerio
+
+> 爬虫 不能饶过反爬虫规则
+
 ```vue
 #vue
 methods: {
