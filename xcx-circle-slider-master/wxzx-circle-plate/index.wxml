@@ -1,3 +1,0 @@
-<!--component/wxzx-circle-plate/index.wxml-->
-<canvas canvas-id="credit-canvas" class='credit-canvas' bindtouchmove="handletouchmove" bindtouchstart="handleTouchStart" >
-    </canvas>
