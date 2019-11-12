@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 // 自动分析出请求路由是不是静态资源的请求，如果是会去punlic文件下找到静态资源返还给客户端
 // path.join()是路由拼接的方法
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(requestIp.mw())
 // 一级路由设置。针对动态数据请求，将请求路由与服务器开发规划的路由匹配，选择合适的二级路由文件

@@ -3,7 +3,7 @@
     <Header />
     <el-main>
       <div class="markdown">
-        <markdown-it-vue v-if="content_type === 1" class="md-body" :content="content" />
+        <markdown-it-vue v-if="content_type === 0" class="md-body" :content="content" />
         <div v-else v-html="content"></div>
         <div class="des">
           <p>
