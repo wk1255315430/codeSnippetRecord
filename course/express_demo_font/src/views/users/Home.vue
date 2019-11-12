@@ -111,7 +111,7 @@ export default {
     },
     goToDes(id) {
       this.$router.push({
-        path: `/article/${id}`
+        path: `article/${id}`
       });
     },
     tabsHandle: Debounce(function() {
