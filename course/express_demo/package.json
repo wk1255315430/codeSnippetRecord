@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "api": "apidoc -i routes/ -o public/apidoc/"
+    "api": "apidoc -i routes/ -o public/apidoc/",
+    "spider":"node ./untils/spider.js"
   },
   "dependencies": {
     "apidoc": "^0.17.7",

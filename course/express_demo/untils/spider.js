@@ -33,13 +33,15 @@ async function main() {
             await handleData()
             log(chalk.green(`'第${i}条${titleslink} ,处理完毕'`))
         }
-        for (let j = 1; j < numPagination.length; j++) {
+        for (let j = 0; j < numPagination.length; j++) {
             await page.waitFor(4000)
             await page.goto(numPagination[j], { timeout: 0, waitUntil: "domcontentloaded" })
             log(chalk.green(`'进入第${j}页'`))
-            for (let i = 1; i < titleslink.length; i++) {
-                await page.waitFor(4000)
+            let [{ titleslink }] = await handleHome()
+            for (let i = 0; i < titleslink.length; i++) {
+                await page.waitFor(6000)
                 await dowload(titleslink[i], i)
+                console.log(numPagination[j], titleslink[i])
             }
         }
 
@@ -101,14 +103,13 @@ async function main() {
             })
             let { title, content, images, link, keyWords } = list[0];
             let sql1 = 'SELECT title FROM article WHERE `title`=?'
-            let flag = false
             db.query(sql1, [title])
                 .then(results => {
                     if (results.length >= 1) {
                         return;
                     } else {
                         page.on('response', async response => {
-                            const matches = /.*\.(jpg|png|svg|gif)$/.exec(response.url());
+                            const matches = /.*\.(jpg|png|svg|gif|JPEG)$/.exec(response.url());
                             if (matches && (matches.length === 2)) {
                                 const extension = matches[0];
                                 let temArr = extension.split('pianshen.com/')[1]
@@ -119,30 +120,29 @@ async function main() {
                                         // log(chalk.red(err));
                                     });
                                 if (temArr[0] !== "images") {
-                                    let exists = fs.existsSync(`public/images/articleImg/${temArr[0]}/${temArr[2]}`);
-
-                                    if (exists) {
-                                        fs.writeFileSync(`public/images/articleImg/${temArr[0]}/${temArr[2]}`, buffer, 'base64');
-                                    } else {
-                                        try {
-                                            fs.mkdirSync(`public/images/articleImg/${temArr[0]}`);
-                                        } catch (err) {
-                                            // log(chalk.red(err))
-                                        }
-                                        try {
-                                            fs.writeFileSync(`public/images/articleImg/${temArr[0]}/${temArr[2]}`, buffer, 'base64');
-                                        } catch (err) {
-                                            // log(chalk.red(err))
-                                        }
-                                    }
-                                    log(chalk.yellow(temArr))
+                                    // try {
+                                    //     fs.mkdirSync(`public/images/${temArr[0]}`);
+                                    // } catch (err) {
+                                    //     log(chalk.red(err))
+                                    //     fs.mkdirSync(`public/images/${temArr[0]}`);
+                                    // }
+                                    // try {
+                                    //     fs.writeFileSync(`public/images/${temArr[0]}/${temArr[2]}`, buffer, 'base64');
+                                    // } catch (err) {
+                                    //     log(chalk.red(err))
+                                    // }
+                                    fs.mkdir(`public/images/${temArr[0]}`, { recursive: true }, (err) => {
+                                        if (err) log(chalk.red(err));
+                                        fs.writeFileSync(`public/images/${temArr[0]}/${temArr[2]}`, buffer, 'base64');
+                                    });
+                                    // log(chalk.yellow(temArr))
                                 }
                             }
                         });
                         let sql = 'INSERT INTO `article`(`cid`,`title`,`content`,`created_at`,`updated_at`,`images`,`link`,`keyWords`,`content_type`) VALUES(?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?,?,?)';
                         db.query(sql, [26, title, content, images, link, keyWords, 1])
                             .then(results => {
-                                log(chalk.green('写入数据库完毕'))
+                                log(chalk.yellow('写入数据库完毕'))
                             })
                             .catch(message => {
                                 log(chalk.red(message))
@@ -170,19 +170,19 @@ async function main() {
                 writeHomeList.titleslink = titleslink
 
                 let pages = homeDome.querySelector('.pagination')
-                let li = pages.getElementsByTagName('li')
-                let numArr = [];
-                for (let i = 0; i < li.length; i++) {
-                    numArr.push(li[i].getElementsByTagName('a').href)
+                if (pages) {
+                    let li = pages.getElementsByTagName('li')
+                    let numArr = [];
+                    for (let i = 0; i < li.length; i++) {
+                        numArr.push(li[i].getElementsByTagName('a')[0].href)
+                    }
+                    writeHomeList.numPagination = numArr
                 }
-                writeHomeList.numPagination = numArr
-
-
 
                 homeList.push(writeHomeList)
                 return homeList
             })
-            log(list)
+            // log(list)
             return list
         }
 
