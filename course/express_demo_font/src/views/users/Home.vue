@@ -101,7 +101,7 @@ export default {
   methods: {
     getInitData() {
       this.$axios
-        .post("user/articles", { page_number: 1 })
+        .post("/api/user/articles", { page_number: 1 })
         .then(({ data: res }) => {
           if (res.status) {
             this.initData = res.data;
@@ -125,7 +125,7 @@ export default {
     }),
     getArticleHotData(day) {
       this.$axios
-        .post("user/articleHot", {
+        .post("/api/user/articleHot", {
           day: day
         })
         .then(({ data: res }) => {

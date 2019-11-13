@@ -89,7 +89,7 @@ export default {
   methods: {
     getInitData(id) {
       this.$axios
-        .post("user/articleById", {
+        .post("/api/user/articleById", {
           id: id
         })
         .then(({ data: res }) => {
@@ -103,7 +103,7 @@ export default {
     },
     //记录查看次数
     async setViewCount(id) {
-      let { data: res } = await this.$axios.post("user/articleView", {
+      let { data: res } = await this.$axios.post("/api/user/articleView", {
         id: id
       });
       sessionStorage.setItem("fskajsusu", true);
@@ -120,7 +120,7 @@ export default {
       });
     },
     getKeyWordsData() {
-      this.$axios.get("/user/keyWords").then(({ data: res }) => {
+      this.$axios.get("/api/user/keyWords").then(({ data: res }) => {
         if (res.status) {
           this.keyWordsInitData = res.data;
         }
@@ -129,7 +129,7 @@ export default {
     getRelationArticleData(keyWords) {
       //相关文章
       this.$axios
-        .post("/user/relationArticle", {
+        .post("/api/user/relationArticle", {
           keyWords: keyWords
         })
         .then(({ data: res }) => {

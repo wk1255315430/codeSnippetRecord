@@ -158,7 +158,7 @@ export default {
       const formdata = new FormData();
       formdata.append("file", $file);
       this.$axios({
-        url: "/admin/upload/articleImg",
+        url: "/api/admin/upload/articleImg",
         method: "put",
         data: formdata,
         headers: { "Content-Type": "" }
@@ -171,7 +171,7 @@ export default {
     $imgDel(pos, $file) {
       let params = pos[0].split(":3000")[1];
       this.$axios
-        .post("/admin/upload/delete", {
+        .post("/api/admin/upload/delete", {
           src: params
         })
         .then(({ data: res }) => {
@@ -180,7 +180,7 @@ export default {
     },
     getInitCate_1st() {
       this.$axios
-        .post("/admin/category", {
+        .post("/api/admin/category", {
           pId: 0
         })
         .then(({ data: res }) => {
@@ -191,7 +191,7 @@ export default {
     },
     getInitCate_2st(id) {
       this.$axios
-        .post("/admin/category", {
+        .post("/api/admin/category", {
           pId: id
         })
         .then(({ data: res }) => {
@@ -211,7 +211,7 @@ export default {
         if (valid) {
           this.form.keyWords = this.dynamicTags.join('|');
           this.$axios
-            .post("/admin/articleAdd", {
+            .post("/api/admin/articleAdd", {
               ...this.form
             })
             .then(({ data: res }) => {

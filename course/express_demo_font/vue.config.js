@@ -21,8 +21,8 @@ module.exports = {
   ], // 是否为生产环境构建生成sourceMap?
 
   productionSourceMap: false, // 调整内部的webpack配置. // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: () => {},
-  configureWebpack: () => {}, // CSS 相关选项
+  chainWebpack: () => { },
+  configureWebpack: () => { }, // CSS 相关选项
   css: {
     // 将组件内部的css提取到一个单独的css文件（只用在生产环境）
     // 也可以是传递给 extract-text-webpack-plugin 的选项对象
@@ -37,21 +37,22 @@ module.exports = {
   pwa: {}, // configure webpack-dev-server behavior
   devServer: {
     open: process.platform === "darwin",
-    disableHostCheck: false,
+    disableHostCheck: true,
     host: "0.0.0.0",
     port: 8080,
     https: false,
     hotOnly: false, // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:3000/", //对应自己的接口
+        target: "http://127.0.0.1:3000",
         changeOrigin: true,
-        ws: true,
-        pathRewrite: {
-          "^/api": ""
-        }
+        ws: true
+      },
+      "/images": {
+        target: "http://127.0.0.1:3000",
+        changeOrigin: true
       }
-    } // string | Object
+    }
     // before: app => {}
   }, // 第三方插件配置
 

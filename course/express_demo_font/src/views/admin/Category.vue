@@ -69,7 +69,7 @@ export default {
         pId = node.data.id;
       }
       this.$axios
-        .post("/admin/category", { pId: pId })
+        .post("/api/admin/category", { pId: pId })
         .then(({ data: res }) => {
           if (res.status) {
             resolve(res.data);
@@ -94,7 +94,7 @@ export default {
         }
       }
       this.$axios
-        .post("/admin/categoryAdd", {
+        .post("/api/admin/categoryAdd", {
           pId: this.formAdd.id,
           name: this.formAdd.name
         })
@@ -120,7 +120,7 @@ export default {
     },
     updateConfigHandle() {
       this.$axios
-        .post("/admin//categoryUpdate", {
+        .post("/api/admin/categoryUpdate", {
           id: this.formUpdate.id,
           name: this.formUpdate.name
         })
@@ -138,7 +138,7 @@ export default {
         title: "",
         message: `"此操作将永久删除 ${data.name} , 是否继续?"`
       }).then(() => {
-        this.$axios.post('/admin/categoryDel',{
+        this.$axios.post('/api/admin/categoryDel',{
           id:data.id
         })
         .then(({data:res})=>{
