@@ -53,9 +53,7 @@ async function main() {
         await browser.close()
         log(chalk.green('服务正常结束'))
 
-        // 这是一个在内部声明的函数，之所以在内部声明而不是外部，是因为在内部可以获取相关的上下文信息，如果在外部声明我还要传入 page 这个对象
         async function handleData() {
-            // 现在我们进入浏览器内部搞些事情，通过page.evaluate方法，该方法的参数是一个函数，这个函数将会在页面内部运行，这个函数的返回的数据将会以Promise的形式返回到外部 
             const list = await page.evaluate(() => {
 
                 // 先声明一个用于存储爬取数据的数组
@@ -120,17 +118,6 @@ async function main() {
                                         // log(chalk.red(err));
                                     });
                                 if (temArr[0] !== "images") {
-                                    // try {
-                                    //     fs.mkdirSync(`public/images/${temArr[0]}`);
-                                    // } catch (err) {
-                                    //     log(chalk.red(err))
-                                    //     fs.mkdirSync(`public/images/${temArr[0]}`);
-                                    // }
-                                    // try {
-                                    //     fs.writeFileSync(`public/images/${temArr[0]}/${temArr[2]}`, buffer, 'base64');
-                                    // } catch (err) {
-                                    //     log(chalk.red(err))
-                                    // }
                                     fs.mkdir(`public/images/${temArr[0]}`, { recursive: true }, (err) => {
                                         if (err) log(chalk.red(err));
                                         fs.writeFileSync(`public/images/${temArr[0]}/${temArr[2]}`, buffer, 'base64');

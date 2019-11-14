@@ -22,4 +22,20 @@ body, html
   width: auto !important
 .el-message
   width: auto !important
+.markdown
+  .title
+    font-size: 2.5rem
+    font-weight: 700
+    display: flex
+    flex-wrap: warp
+    justify-content: center
+  div
+    padding: 1rem
+    font-size: 1.5rem
+    p
+      margin: 0 !important
+      padding: 0 !important
+      text-indent: 0 !important
+    img
+      width: 100%
 </style>

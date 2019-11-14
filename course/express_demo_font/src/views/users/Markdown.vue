@@ -4,10 +4,11 @@
     <el-main>
       <div class="markdown">
         <markdown-it-vue v-if="content_type === 0" class="md-body" :content="content" />
-        <div v-else v-html="content"></div>
+        <h1 v-if="content_type === 1" class="title" v-text="title"></h1>
+        <div v-if="content_type === 1" v-html="content"></div>
         <div class="des">
           <p>
-            版权声明：本文为博主原创文章，遵循
+            版权声明:本文为博主原创文章，遵循
             <el-link
               href="https://creativecommons.org/licenses/by-sa/4.0/"
               target="_blank"
@@ -15,9 +16,7 @@
           </p>
           <p>
             本文链接：
-            <el-link
-              href="https://blog.csdn.net/weixin_43728574/article/details/102574258"
-            >https://blog.csdn.net/weixin_43728574/article/details/102574258"</el-link>
+            <el-link type="info" :underline="false">{{link}}</el-link>
           </p>
         </div>
         <div class="socket">
@@ -52,6 +51,7 @@
       </div>
     </el-main>
     <el-footer></el-footer>
+    <el-backtop target=".markdown .markdown"></el-backtop>
   </el-container>
 </template>
 
@@ -79,7 +79,9 @@ export default {
       },
       keyWordsInitData: "",
       relationData: [],
-      content_type:'',
+      content_type: "",
+      link: "",
+      title: ""
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -94,7 +96,9 @@ export default {
         })
         .then(({ data: res }) => {
           if (res.status) {
-            this.content_type = res.data.content_type
+            this.title = res.data.title;
+            this.link = res.data.link;
+            this.content_type = res.data.content_type;
             this.content = res.data.content;
             if (res.data.keyWords)
               this.getRelationArticleData(res.data.keyWords);
@@ -186,6 +190,7 @@ export default {
       width: 70%
       flex-shrink: 0
       position: relative
+      overflow-y: scroll
       .md-body
         padding: 2%
       .gb

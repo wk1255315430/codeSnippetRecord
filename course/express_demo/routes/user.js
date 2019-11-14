@@ -51,7 +51,7 @@ router.post('/articles', function (req, res, next) {
   let { page_number } = req.body
   let lines_perpage = 10;
   let page_start = (page_number - 1) * lines_perpage;
-  let sql = "SELECT `id`,`title`,`description` FROM article LIMIT ? , ?";
+  let sql = "SELECT `id`,`title`,`content` FROM article LIMIT ? , ?";
   db.query(sql, [page_start, lines_perpage])
     .then(results => {
       res.json({
@@ -77,7 +77,7 @@ router.post('/articles', function (req, res, next) {
  */
 router.post('/articleById', (req, res, next) => {
   let { id } = req.body;
-  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords`,`content_type` FROM article WHERE id = ?'
+  let sql = 'SELECT `id`,`title`,`description`,`content`,`created_at`,`updated_at` ,`keyWords`,`content_type`,`link` FROM article WHERE id = ?'
   db.query(sql, [id])
     .then(results => {
       res.json({
@@ -129,9 +129,9 @@ router.post('/articleHot', (req, res, next) => {
   if (!limit) {
     limit = 10
   }
-  let sql = 'SELECT `id`,`title`,`description` FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY `count` DESC LIMIT ?';
+  let sql = 'SELECT `id`,`title`,`content` FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY `count` DESC LIMIT ?';
   if (!day) {
-    sql = 'SELECT `id`,`title`,`description` FROM `article` ORDER BY	`count` DESC LIMIT ?'
+    sql = 'SELECT `id`,`title`,`content` FROM `article` ORDER BY	`count` DESC LIMIT ?'
     params = [limit]
   } else {
     params.push(limit);

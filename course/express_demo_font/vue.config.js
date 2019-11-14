@@ -21,8 +21,8 @@ module.exports = {
   ], // 是否为生产环境构建生成sourceMap?
 
   productionSourceMap: false, // 调整内部的webpack配置. // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: () => { },
-  configureWebpack: () => { }, // CSS 相关选项
+  chainWebpack: () => {},
+  configureWebpack: () => {}, // CSS 相关选项
   css: {
     // 将组件内部的css提取到一个单独的css文件（只用在生产环境）
     // 也可以是传递给 extract-text-webpack-plugin 的选项对象

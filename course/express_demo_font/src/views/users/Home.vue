@@ -9,7 +9,9 @@
               <h3 class="blogTitle" @click="goToDes(item.id)">
                 <el-link type="primary" v-text="item.title"></el-link>
               </h3>
-              <p class="blogDes" v-text="item.description"></p>
+              <div class="blogDesWrap">
+                <p class="blogDes">{{item.content | filtersContent}}</p>
+              </div>
             </div>
             <div class="paginationWrap">
               <el-pagination background layout="prev, pager, next" :total="count"></el-pagination>
@@ -37,7 +39,9 @@
               <h3 class="blogTitle" @click="goToDes(item.id)">
                 <el-link type="primary" v-text="item.title"></el-link>
               </h3>
-              <p class="blogDes" v-text="item.description"></p>
+              <div class="blogDesWrap">
+                <p class="blogDes">{{item.content | filtersContent}}</p>
+              </div>
             </div>
             <div class="paginationWrap">
               <el-pagination background layout="prev, pager, next" :total="count"></el-pagination>
@@ -98,6 +102,11 @@ export default {
       this.getArticleHotData(newValue);
     }
   },
+  filters: {
+    filtersContent: function(value) {
+      return value.replace(/<[^<>]+>/g, "").replace(/&nbsp;/gi, "");
+    }
+  },
   methods: {
     getInitData() {
       this.$axios
@@ -151,10 +160,15 @@ export default {
       .blogTitle
         .el-link
           font-size: 2.4rem
-    .blogDes
-      font-size: 1.7rem
-      padding-bottom: 1.5rem
+    .blogDesWrap
       border-bottom: 0.1rem solid #dbdbdb
+      .blogDes
+        color #909090
+        font-size: 1.7rem
+        display: -webkit-box
+        -webkit-box-orient: vertical
+        -webkit-line-clamp: 3
+        overflow: hidden
     .el-select
       display: none
       &.isShowSelect
