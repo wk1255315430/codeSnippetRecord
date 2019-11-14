@@ -13,7 +13,7 @@
                 <p class="blogDes">{{item.content | filtersContent}}</p>
               </div>
             </div>
-            <div class="paginationWrap">
+            <div class="paginationWrap" :class="{'change':initData}">
               <el-pagination
                 @current-change="currentPageHandle"
                 background
@@ -49,7 +49,7 @@
                 <p class="blogDes">{{item.content | filtersContent}}</p>
               </div>
             </div>
-            <div class="paginationWrap">
+            <div class="paginationWrap" :class="{'change':initHotData}">
               <el-pagination
                 background
                 @current-change="currentHotPageHandle"
@@ -62,7 +62,7 @@
         </el-tabs>
       </div>
     </el-main>
-    <el-footer :style="footerBg">
+    <el-footer :class="{'change':initData,'change':initHotData}" :style="footerBg">
       <p>
         Copyright © 89.com
         <span>|</span>
@@ -117,6 +117,7 @@ export default {
   },
   filters: {
     filtersContent: function(value) {
+      if (!value) return "";
       return value.replace(/<[^<>]+>/g, "").replace(/&nbsp;/gi, "");
     }
   },
@@ -202,13 +203,17 @@ export default {
         padding-left: 0.7rem
 .paginationWrap
   padding: 6% 12% 0 12%
-  display: flex
+  display: none
   flex-direction: row-reverse
-.el-footer
+&.change
   display: flex
+.el-footer
+  display: none
   align-items: center
   padding: 0 12%
   height: 4rem !important
   color: #585858
   font-size: 1rem
+&.change
+  display: flex
 </style>

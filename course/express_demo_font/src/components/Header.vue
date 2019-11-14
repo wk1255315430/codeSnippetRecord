@@ -64,7 +64,7 @@ export default {
     },
     getSerchData(queryString, cb) {
       this.$axios
-        .post("user/search", {
+        .post("/api/user/search", {
           queryString: queryString
         })
         .then(({ data: res }) => {
