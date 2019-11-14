@@ -3,12 +3,6 @@ var router = express.Router();
 //数据库
 var db = require('../config/mysql')
 var nodemailer = require('../config/mailer')
-let articleCount;
-let temSql = 'select count(*) from article';
-db.query(temSql)
-  .then(results => {
-    articleCount = results[0]['count(*)'];
-  })
 /**
  * @api {post} /user/login 验证邮箱并注册登录
  * @apiName /user/logi
@@ -56,8 +50,7 @@ router.post('/articles', function (req, res, next) {
     .then(results => {
       res.json({
         status: true,
-        data: results,
-        count: articleCount,
+        data: results
       })
     })
     .catch(message => {
@@ -120,28 +113,51 @@ router.post('/articleView', (req, res, next) => {
  * @apiName /user/articleHot
  * @apiGroup User
  * @apiParam { Number } day 天数,天数不传为查看总榜
- * @apiParam { Number } limit 非必传，默认为10
+ * @apiParam { Number } page_number 查看的页数，每页默认为10
  * @apiSampleRequest /user/articleHot
  */
 router.post('/articleHot', (req, res, next) => {
-  let { day, limit } = req.body;
+  let { day, page_number } = req.body;
   let params = [day]
-  if (!limit) {
-    limit = 10
-  }
-  let sql = 'SELECT `id`,`title`,`content` FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY `count` DESC LIMIT ?';
+  let lines_perpage = 10;
+  let page_start = (page_number - 1) * lines_perpage;
+  let sql;
+  let sqla = 'SELECT `id`,`title`,`content` FROM `article` ORDER BY `count` DESC LIMIT ?,?' //总榜/限制榜：排序分页 总榜不需要知道count (day, page_number)
+  let sqlb = 'SELECT count(*) FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY `count` DESC' //限制榜：count (day)
+  let sqlC = 'SELECT `id`,`title`,`content` FROM article WHERE DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(updated_at) ORDER BY `count` DESC LIMIT ?,?' //限制榜：排序分页 (day, page_number)
   if (!day) {
-    sql = 'SELECT `id`,`title`,`content` FROM `article` ORDER BY	`count` DESC LIMIT ?'
-    params = [limit]
+    sql = sqla
+    params = [page_start, lines_perpage]
   } else {
-    params.push(limit);
+    if (!page_number) {
+      sql = sqlb;
+    } else {
+      sql = sqlC;
+      params.push(page_start, lines_perpage);
+    }
   }
   db.query(sql, params)
     .then(results => {
-      res.json({
-        status: true,
-        data: results
-      })
+      if (!day) {
+        res.json({
+          status: true,
+          data: results
+        })
+      } else {
+        if (!page_number) {
+          res.json({
+            status: true,
+            data: "",
+            count: results[0]['count(*)']
+          })
+        } else {
+          res.json({
+            status: true,
+            data: results
+          })
+        }
+      }
+
     })
     .catch(message => {
       res.json({

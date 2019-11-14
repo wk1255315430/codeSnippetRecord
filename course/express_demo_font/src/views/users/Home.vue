@@ -14,7 +14,13 @@
               </div>
             </div>
             <div class="paginationWrap">
-              <el-pagination background layout="prev, pager, next" :total="count"></el-pagination>
+              <el-pagination
+                @current-change="currentPageHandle"
+                background
+                :pager-count="11"
+                layout="pager"
+                :total="100"
+              ></el-pagination>
             </div>
           </el-tab-pane>
           <el-tab-pane name="second">
@@ -44,7 +50,13 @@
               </div>
             </div>
             <div class="paginationWrap">
-              <el-pagination background layout="prev, pager, next" :total="count"></el-pagination>
+              <el-pagination
+                background
+                @current-change="currentHotPageHandle"
+                :pager-count="11"
+                layout="pager"
+                :total="count"
+              ></el-pagination>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -100,6 +112,7 @@ export default {
   watch: {
     tabHotValue(newValue, oldValue) {
       this.getArticleHotData(newValue);
+      this.getArticleHotData(newValue, 1);
     }
   },
   filters: {
@@ -108,13 +121,12 @@ export default {
     }
   },
   methods: {
-    getInitData() {
+    getInitData(number = 1) {
       this.$axios
-        .post("/api/user/articles", { page_number: 1 })
+        .post("/api/user/articles", { page_number: number })
         .then(({ data: res }) => {
           if (res.status) {
             this.initData = res.data;
-            this.count = res.count;
           }
         });
     },
@@ -126,22 +138,35 @@ export default {
     tabsHandle: Debounce(function() {
       if (this.tabActiveName === "second") {
         this.getArticleHotData(3);
+        this.getArticleHotData(3, 1);
         this.visiableTabHot = !this.visiableTabHot;
       }
       if (!this.visiableTabHot) {
         this.tabHotValue = "3";
       }
     }),
-    getArticleHotData(day) {
-      this.$axios
-        .post("/api/user/articleHot", {
-          day: day
-        })
-        .then(({ data: res }) => {
-          if (res.status) {
+    getArticleHotData(day, page_number) {
+      let params = {
+        day: day
+      };
+      if (page_number) {
+        params.page_number = page_number;
+      }
+      this.$axios.post("/api/user/articleHot", params).then(({ data: res }) => {
+        if (res.status) {
+          if (res.count) {
+            this.count = res.count > 100 ? 100 : res.count;
+          } else {
             this.initHotData = res.data;
           }
-        });
+        }
+      });
+    },
+    currentPageHandle(value) {
+      this.getInitData(value);
+    },
+    currentHotPageHandle(page_number) {
+      this.getArticleHotData(this.tabHotValue, page_number);
     }
   },
   created() {
@@ -163,7 +188,7 @@ export default {
     .blogDesWrap
       border-bottom: 0.1rem solid #dbdbdb
       .blogDes
-        color #909090
+        color: #909090
         font-size: 1.7rem
         display: -webkit-box
         -webkit-box-orient: vertical

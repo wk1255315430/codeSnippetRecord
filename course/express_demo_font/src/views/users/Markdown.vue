@@ -190,7 +190,6 @@ export default {
       width: 70%
       flex-shrink: 0
       position: relative
-      overflow-y: scroll
       .md-body
         padding: 2%
       .gb
