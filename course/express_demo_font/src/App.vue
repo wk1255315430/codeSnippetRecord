@@ -22,6 +22,8 @@ body, html
   width: auto !important
 .el-message
   width: auto !important
+.el-scrollbar__wrap
+  overflow-x: hidden
 .markdown
   .title
     font-size: 2.5rem
@@ -37,5 +39,5 @@ body, html
       padding: 0 !important
       text-indent: 0 !important
     img
-      width: 100%
+      max-width: 100%
 </style>

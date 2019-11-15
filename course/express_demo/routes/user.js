@@ -45,7 +45,7 @@ router.post('/articles', function (req, res, next) {
   let { page_number } = req.body
   let lines_perpage = 10;
   let page_start = (page_number - 1) * lines_perpage;
-  let sql = "SELECT `id`,`title`,`content` FROM article LIMIT ? , ?";
+  let sql = "SELECT `id`,`title`,`content` FROM article ORDER BY `updated_at` DESC LIMIT ? , ?";
   db.query(sql, [page_start, lines_perpage])
     .then(results => {
       res.json({
