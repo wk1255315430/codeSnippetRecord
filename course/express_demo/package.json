@@ -5,12 +5,13 @@
   "scripts": {
     "start": "node ./bin/www",
     "api": "apidoc -i routes/ -o public/apidoc/",
-    "spider":"node ./untils/spider.js"
+    "spider": "node ./untils/spider.js"
   },
   "dependencies": {
     "apidoc": "^0.17.7",
     "chalk": "^2.4.2",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-jwt": "^5.3.1",

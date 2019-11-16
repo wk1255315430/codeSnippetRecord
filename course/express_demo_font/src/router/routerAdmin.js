@@ -22,5 +22,12 @@ export default [
           import(/* webpackChunkName: "admin" */ "@/views/admin/Category.vue")
       }
     ]
+  },
+  {
+    path: "/login",
+    name: "login",
+    meta: { requiredAuth: true },
+    component: () =>
+      import(/*webpackChunkName:"login" */ "@/views/admin/Login.vue")
   }
 ];

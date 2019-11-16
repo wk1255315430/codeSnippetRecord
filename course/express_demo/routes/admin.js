@@ -4,10 +4,8 @@ var router = express.Router();
 var db = require('../config/mysql')
 var fs = require("fs");
 var path = require("path");
-let server = {
-  host: 'localhost',
-  port: 3000,
-};
+const crypto = require('crypto');
+const jwt = require("jsonwebtoken");
 //文件传输
 const multer = require('multer');
 const upload = multer();
@@ -189,22 +187,22 @@ router.post('/categoryDel', (req, res, next) => {
  * @apiParam { String } name 修改后的分类名称
  * @apiSampleRequest /admin/categoryUpdate
  */
-router.post('/categoryUpdate',(req,res,next)=>{
-  let {name,id} = req.body;
+router.post('/categoryUpdate', (req, res, next) => {
+  let { name, id } = req.body;
   let sql = 'UPDATE `category` SET `name`=? WHERE id=?';
-  db.query(sql,[name,id])
-  .then(results=>{
-    res.json({
-      status:true,
-      data:results
+  db.query(sql, [name, id])
+    .then(results => {
+      res.json({
+        status: true,
+        data: results
+      })
     })
-  })
-  .catch(message=>{
-    res.json({
-      status:false,
-      data:message
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
     })
-  })
 })
 /**
  * @api {post} /admin/articleAdd 新增文章
@@ -218,20 +216,49 @@ router.post('/categoryUpdate',(req,res,next)=>{
  * @apiParam { String } link 文章链接/来源
  * @apiSampleRequest /admin/articleAdd
  */
-router.post('/articleAdd',(req,res,next)=>{
-  let {cid,title,description,content,images,link,keyWords} = req.body;
+router.post('/articleAdd', (req, res, next) => {
+  let { cid, title, description, content, images, link, keyWords } = req.body;
   let sql = 'INSERT INTO `article`(`cid`,`title`,`description`,`content`,`created_at`,`updated_at`,`images`,`link`,`keyWords`) VALUES(?,?,?,?,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),?,?,?)';
-  db.query(sql,[cid,title,description,content,images,link,keyWords])
-    .then(results=>{
+  db.query(sql, [cid, title, description, content, images, link, keyWords])
+    .then(results => {
       res.json({
-        status:true,
-        data:''
+        status: true,
+        data: ''
       })
     })
-    .catch(message=>{
+    .catch(message => {
       res.json({
-        status:false,
-        data:message
+        status: false,
+        data: message
+      })
+    })
+})
+router.post('/bmsl', (req, res, next) => {
+  let { uname, pwd } = req.body;
+  let sql = 'SELECT `uname` FROM `admins` WHERE `uname` = ? AND `pwd` = ?'
+  db.query(sql, [uname, pwd])
+    .then(results => {
+      if (results.length) {
+        const hmac = crypto.createHmac('sha256', 'hubery');
+        let ret = hmac.update(uname);
+        ret = hmac.digest('hex')
+        let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '4h' })
+        res.json({
+          status: true,
+          data: '登录成功',
+          token: token
+        })
+      } else {
+        res.status(404).json({
+          status: false,
+          data: '登录失败',
+        })
+      }
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
       })
     })
 })

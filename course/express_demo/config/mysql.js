@@ -20,7 +20,6 @@ let query = function (sql, arr = [], callback) {
                 if (error) reject(error.message);
                 //执行回调函数，将数据返回
                 else resolve(results)
-
             });
         });
     })
