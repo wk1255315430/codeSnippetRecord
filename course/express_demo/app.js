@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const expressJwt = require('express-jwt');
-var cors = require('cors');
 //二级路由设置。引入router文件夹所有自定义的路由处理文件
 var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/user');
@@ -36,8 +35,6 @@ app.use(expressJwt({ secret: 'secret' }).unless({
   path:/^\/api\/user/ //路由开头/api/user不验证token
 }));
 
-// 设置跨域资源分享CORS
-app.use(cors());
 
 // 一级路由设置。针对动态数据请求，将请求路由与服务器开发规划的路由匹配，选择合适的二级路由文件
 app.use('/api/admin', adminRouter);

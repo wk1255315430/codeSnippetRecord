@@ -11,8 +11,8 @@
             <input
               type="text"
               class="input-control"
-              @blur="checkUsername"
-              v-model="formData.username"
+              @blur="checkUnamePwd(0)"
+              v-model="formData.uname"
               placeholder="请输入账户名"
             />
           </div>
@@ -22,9 +22,9 @@
             </div>
             <input
               type="password"
-              @blur="checkPassword"
+              @blur="checkUnamePwd(1)"
               class="input-control"
-              v-model="formData.password"
+              v-model="formData.pwd"
               placeholder="请输入密码"
             />
           </div>
@@ -39,30 +39,30 @@
 
 <script>
 import regular from "@/utils/regular";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   props: ["redirect"],
   data() {
     return {
       formData: {
-        username: "",
-        password: ""
+        uname: "",
+        pwd: ""
       },
-      valid: [true, true]
+      valid: [true, true],
+      regArrFlag: ["", ""]
     };
   },
   methods: {
+    ...mapActions(["getToken"]),
     regHandle() {
-      // 表单验证
-      // 验证通过
-      this.$store
-        .dispatch("User/Login", { ...this.formData })
-        .then(res => {
-          // 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-          sessionStorage.token = res.data.token;
-          sessionStorage.role = res.data.role;
-          // 跳转页面
+      let regArrFlag = this.regArrFlag;
+      for (let i = 0; i < regArrFlag.length; i++) {
+        if (!regArrFlag[i]) return this.$set(this.valid, i, false);
+      }
+      this.getToken(this.formData).then(res => {
+        if (res.status) {
           this.$message({
-            message: res.msg,
+            message: res.data,
             type: "success",
             duration: 1000,
             onClose: () => {
@@ -73,34 +73,44 @@ export default {
               this.$router.push("/admin");
             }
           });
-        })
-        .catch(res => {
-          this.$message.error(res.msg);
-        });
-    },
-    checkUsername() {
-      let regArr = [{ type: 'email', value: this.formData.username, des: "用户名" }];
-      for (let i = 0; i < regArr.length; i++) {
-        let flag = regular.regexCheck(regArr[i]);
-        console.log(flag)
-        if (flag !== true) {
-          this.$set(this.valid,0,false)
-          this.$message.error(flag);
-          return;
-        } else {
-          this.$set(this.valid,0,true)
         }
-      }
+      });
+      // .then(res => {
+      //   // 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
+      //   sessionStorage.token = res.data.token;
+      //   sessionStorage.role = res.data.role;
+      //   // 跳转页面
+      //   this.$message({
+      //     message: res.msg,
+      //     type: "success",
+      //     duration: 1000,
+      //     onClose: () => {
+      //       if (this.redirect) {
+      //         this.$router.push(this.redirect);
+      //         return;
+      //       }
+      //       this.$router.push("/admin");
+      //     }
+      //   });
+      // })
+      // .catch(res => {
+      //   this.$message.error(res.msg);
+      // });
     },
-    checkPassword() {
-      let regArr = [{ type: "", value: this.formData.password, des: "密码" }];
-      for (let i = 0; i < regArr.length; i++) {
-        let flag = regular.regexCheck(regArr[i]);
-        if (flag !== true) {
-          this.$set(this.valid,1,false);
-          this.$message.error(flag);
-          return;
-        }else this.$set(this.valid,1,true)
+    checkUnamePwd(index) {
+      let regArr = [
+        { type: "email", value: this.formData.uname, des: "用户名" },
+        { type: "", value: this.formData.pwd, des: "密码" }
+      ];
+      let flag = regular.regexCheck(regArr[index]);
+      if (flag !== true) {
+        this.$set(this.valid, index, false);
+        this.$set(this.regArrFlag, index, false);
+        this.$message.error(flag);
+        return;
+      } else {
+        this.$set(this.valid, index, true);
+        this.$set(this.regArrFlag, index, true);
       }
     }
   }

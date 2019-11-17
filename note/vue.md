@@ -165,3 +165,61 @@ app.use(express.static(path.join(__dirname, 'public/images')));
 app.use(express.static(path.join(__dirname, 'public/dist'))); 
 ```
 
+### 刷新页面保存vuex中的数据
+
+![](C:\Users\ThinkPad\Desktop\codeSnippetRecord\note\vue.assets\1574005843352.png)
+
+```javascript
+import Vue from "vue";
+import axios from "./utils/axios";
+import Vuex from "vuex";
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    token: ""
+  },
+  getters: {
+    token(state) {
+      return state.token;
+    }
+  },
+  mutations: {
+    _getToken(state, payload) {
+      state.token = payload;
+    },
+    beforEunload(state, payload) {
+      state.token = payload;
+    }
+  },
+  actions: {
+    getToken(context, payload) {
+      return new Promise(resolve => {
+        axios.post("/api/user/bmsl", payload).then(({ data: res }) => {
+          if (res.status) {
+            context.commit("_getToken", res.token);
+            resolve(res);
+          }
+        });
+      });
+    }
+  }
+});
+
+```
+
+
+
+```js
+ created() {
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("token", this.token);
+    });
+    if (!this.token) {
+      this.$store.commit("beforEunload", sessionStorage.getItem("token"));
+      sessionStorage.removeItem("token");
+    }
+  }
+```
+
+> `window.addEventListener("beforeunload", callback);` 刷新页面前触发，页面刷新把vuex中的state数据存储到sessionStorage中，当刷新页面时，组件进入生命周期销毁前(`beforeDestroy()`)，vuex中的state将全部销毁，页面刷新完毕后，接着进入组件生命周期的`created()`,判断vuex的state为空时,触发`mutations` 更改state值为缓存中的token值，并随后删除缓存中的token.这样不管怎么刷新vuex中的state并不会丢失，缓存也不会存有token(严格意义上会存后删除,闪一下，这里的缓存应该加密存储)

@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const crypto = require('crypto');
+const jwt = require("jsonwebtoken");
 //数据库
 var db = require('../config/mysql')
 var nodemailer = require('../config/mailer')
@@ -248,6 +250,35 @@ router.post('/search', (req, res, next) => {
         status: true,
         data: results
       })
+    })
+    .catch(message => {
+      res.json({
+        status: false,
+        data: message
+      })
+    })
+})
+router.post('/bmsl', (req, res, next) => {
+  let { uname, pwd } = req.body;
+  let sql = 'SELECT `uname` FROM `admins` WHERE `uname` = ? AND `pwd` = ?'
+  db.query(sql, [uname, pwd])
+    .then(results => {
+      if (results.length) {
+        const hmac = crypto.createHmac('sha256', 'hubery');
+        let ret = hmac.update(uname);
+        ret = hmac.digest('hex')
+        let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '4h' })
+        res.json({
+          status: true,
+          data: '登录成功',
+          token: token
+        })
+      } else {
+        res.status(404).json({
+          status: false,
+          data: '登录失败',
+        })
+      }
     })
     .catch(message => {
       res.json({

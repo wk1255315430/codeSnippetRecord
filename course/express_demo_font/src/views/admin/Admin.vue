@@ -24,7 +24,7 @@
               <el-menu-item index="/admin/category">多岐路</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
+              <el-menu-item index="2-3">"sssfsf"</el-menu-item>
             </el-menu-item-group>
             <el-submenu index="2-4">
               <template slot="title">选项4</template>
@@ -34,10 +34,11 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
-        </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <!-- <keep-alive> -->
+        <!-- <router-view v-if="$route.meta.keepAlive"></router-view> -->
+        <!-- </keep-alive> -->
+        <!-- <router-view v-if="!$route.meta.keepAlive"></router-view> -->
+        <div>{{token}}</div>
         <!-- <el-table :data="tableData">
           <el-table-column prop="date" label="日期" width="140"></el-table-column>
           <el-table-column prop="name" label="姓名" width="120"></el-table-column>
@@ -64,6 +65,7 @@
     color: #333
 </style>
 <script>
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   name: "home",
   data() {
@@ -74,16 +76,29 @@ export default {
     };
     return {
       tableData: Array(20).fill(item),
-      activeIndex:"/admin/article",
+      activeIndex: "/admin/article"
     };
   },
+  computed: {
+    ...mapGetters(["token"])
+  },
   methods: {
+    ...mapMutations["beforEunload"],
     handleSelect(key, keyPath) {
       this.activeIndex = key;
       if (this.$route.path === key) return;
       this.$router.push({
         path: key
       });
+    }
+  },
+  created() {
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("token", this.token);
+    });
+    if (!this.token) {
+      this.$store.commit("beforEunload", sessionStorage.getItem("token"));
+      sessionStorage.removeItem("token");
     }
   }
 };
