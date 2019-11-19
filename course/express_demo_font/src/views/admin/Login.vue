@@ -79,28 +79,6 @@ export default {
           });
         }
       });
-
-      // .then(res => {
-      //   // 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-      //   sessionStorage.token = res.data.token;
-      //   sessionStorage.role = res.data.role;
-      //   // 跳转页面
-      //   this.$message({
-      //     message: res.msg,
-      //     type: "success",
-      //     duration: 1000,
-      //     onClose: () => {
-      //       if (this.redirect) {
-      //         this.$router.push(this.redirect);
-      //         return;
-      //       }
-      //       this.$router.push("/admin");
-      //     }
-      //   });
-      // })
-      // .catch(res => {
-      //   this.$message.error(res.msg);
-      // });
     },
     checkUnamePwd(index) {
       let regArr = [

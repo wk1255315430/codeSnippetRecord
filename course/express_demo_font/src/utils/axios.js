@@ -1,5 +1,9 @@
 import axios from "axios";
 import qs from "qs";
+import { showLoading, hideLoading } from "./loading";
+import { Message as message} from "element-ui"
+import store from "../store";
+
 axios.defaults.timeout = 20000; //响应时间
 // axios.defaults.headers["Content-Type"] =
 //   "application/x-www-form-urlencoded;charset=UTF-8"; //配置请求头
@@ -9,9 +13,19 @@ axios.interceptors.request.use(
     if (config.method === "post") {
       config.data = qs.stringify(config.data);
     }
+    showLoading();
+    if (config.url == "/api/user/bmsl") {
+      return config;
+    }
+    if (store.getters["token"]) {
+      config.headers.Authorization = `Bearer ${store.getters["token"]}`;
+    } else {
+      message.error("token未获取，请登录！");
+    }
     return config;
   },
   error => {
+    hideLoading();
     console.log("错误的传参");
     return Promise.reject(error);
   }
@@ -20,13 +34,15 @@ axios.interceptors.request.use(
 //返回状态判断(添加响应拦截器)
 axios.interceptors.response.use(
   response => {
+    hideLoading();
     if (!response.data.success) {
       return Promise.resolve(response);
     }
     return response;
   },
   error => {
-    console.log("网络异常");
+    hideLoading();
+    message.error("网络异常");
     return Promise.reject(error);
   }
 );
