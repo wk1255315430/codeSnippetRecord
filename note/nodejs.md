@@ -3,6 +3,10 @@
 
 --是express默认的日志中间件
 
+##### crypto
+
+--加密解密模块
+
 ##### jade
 
 --摸板解析模块（jade代码反人类）一般用不到动它以及更换它
@@ -229,3 +233,58 @@ app.listen(localPort, () => {
 ```
 
 *express 解析post请求需要使用body-parser*第三方包来解析
+
+## crypto加密解密：aes-256-cbc对称加密
+
+```javascript
+#untils/crypto.js
+
+const crypto = require('crypto');
+// AES对称加解密 http://nodejs.cn/api/crypto.html#crypto_hash_update_data_inputencoding
+// AES 有三种长度 128位、192位、256位，这三种的区别，主要来自于密钥的长度，16字节密钥=128位，24字节密钥=192位，32字节密钥=256位
+const key = '63c005dbcc70cea58f2143f619cc6a3f'; //32位
+const iv = '63c005dbcc70cea5'; //16位
+const algorithm = 'aes-256-cbc'
+
+function decrypt(data) {
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(data, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted
+}
+function encrypt(data) {
+    const cipheriv = crypto.createCipheriv(algorithm, key, iv)
+    let encrypted = cipheriv.update(data, 'utf8', 'hex');
+    encrypted += cipheriv.final('hex');
+    return encrypted
+}
+module.exports = {
+    encrypt,
+    decrypt,
+    crypto
+}
+```
+
+<font color=Blue>对称加密目前主流的有AES和DES，AES是新一代的标准，速度快，安全级别更高。</font>
+
+### AES 
+
+AES的加密模式(model)有五种：CBC、ECB、CTR、OCF、CFB
+
+1. ECB：电子密本方式，需要一个密钥即可，特点是简单，利于并行计算。
+2. CBC：密文分组链接方式，除了需要一个密钥之外，还需要一个向量，向量的作用也是用于数据的加密，所以这个的安全性要好于 ECB
+3. CTR、OCF、CFB：具体算法的实现方式不一样，优缺点也各不相同，而这几个都同 CBC 一样，都需要密钥和向量。
+
+> AES 有三种长度 128位、192位、256位，这三种的区别，主要来自于密钥的长度，16字节密钥=128位，24字节密钥=192位，32字节密钥=256位。如下表格：
+
+| 长度  | 密钥长度(key) | 向量长度(vi) |
+| :---: | :-----------: | :----------: |
+| 128位 |      16       |      16      |
+| 192位 |      24       |      16      |
+| 256位 |      32       |      16      |
+
+### DES
+
+加密默认与 AES 相同，也有五种模式，除了 ECB 只需要密钥，其他模式需要密钥和向量。
+
+与 AES 不同的是， DES 的密钥长度只有8字节，向量也是8字节。

@@ -40,6 +40,7 @@
 <script>
 import regular from "@/utils/regular";
 import { mapState, mapGetters, mapActions } from "vuex";
+import aes from "@/utils/aes";
 export default {
   props: ["redirect"],
   data() {
@@ -59,7 +60,10 @@ export default {
       for (let i = 0; i < regArrFlag.length; i++) {
         if (!regArrFlag[i]) return this.$set(this.valid, i, false);
       }
-      this.getToken(this.formData).then(res => {
+      let payload = JSON.parse(JSON.stringify(this.formData));
+      payload.uname = aes.encrypt(this.formData.uname);
+      payload.pwd = aes.encrypt(this.formData.pwd);
+      this.getToken(payload).then(res => {
         if (res.status) {
           this.$message({
             message: res.data,
@@ -75,6 +79,7 @@ export default {
           });
         }
       });
+
       // .then(res => {
       //   // 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
       //   sessionStorage.token = res.data.token;
@@ -125,13 +130,13 @@ export default {
   position: relative
   .form-box
     position: absolute
-    right: 10rem
+    right: 10%
     top: 50%
     transform: translateY(-50%)
     background-color: white
     border-radius: 0.4rem
     font-size: 1.4rem
-    width: 28%
+    min-width: 28%
     .title
       font-size: 1.6rem
       font-weight: bold

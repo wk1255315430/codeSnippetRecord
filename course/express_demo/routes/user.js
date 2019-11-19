@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 //数据库
 var db = require('../config/mysql')
 var nodemailer = require('../config/mailer')
+const cryptoAES = require('../untils/crypto')
 /**
  * @api {post} /user/login 验证邮箱并注册登录
  * @apiName /user/logi
@@ -260,11 +260,13 @@ router.post('/search', (req, res, next) => {
 })
 router.post('/bmsl', (req, res, next) => {
   let { uname, pwd } = req.body;
+  uname = cryptoAES.decrypt(uname)
+  pwd = cryptoAES.decrypt(pwd)
   let sql = 'SELECT `uname` FROM `admins` WHERE `uname` = ? AND `pwd` = ?'
   db.query(sql, [uname, pwd])
     .then(results => {
       if (results.length) {
-        const hmac = crypto.createHmac('sha256', 'hubery');
+        const hmac = cryptoAES.crypto.createHmac('sha256', 'hubery');
         let ret = hmac.update(uname);
         ret = hmac.digest('hex')
         let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '4h' })
