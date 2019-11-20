@@ -287,4 +287,10 @@ export default {
                 padding: 0 0.5rem
               .el-divider
                 margin: 0
+@media screen and (max-width: 768px)
+  .el-container
+    .el-header
+    .el-scrollbar__wrap
+      .el-main
+        width: 100%
 </style>

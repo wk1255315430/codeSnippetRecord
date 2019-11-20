@@ -266,7 +266,7 @@ router.post('/bmsl', (req, res, next) => {
   db.query(sql, [uname, pwd])
     .then(results => {
       if (results.length) {
-        const hmac = cryptoAES.crypto.createHmac('sha256', 'hubery');
+        const hmac = cryptoAES.crypto.createHmac('sha256', ((new Date()).getTime()).toString());
         let ret = hmac.update(uname);
         ret = hmac.digest('hex')
         let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '1h' })

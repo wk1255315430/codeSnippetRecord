@@ -74,7 +74,10 @@ export default {
           if (res.status) {
             resolve(res.data);
           }
-        });
+        })
+        .catch(error=>{
+          console.log(error,'tttttttttttt')
+        })
     },
     // 添加
     showAddDialog(node, data) {

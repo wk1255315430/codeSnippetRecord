@@ -216,4 +216,19 @@ export default {
   font-size: 1rem
 &.change
   display: flex
+@media screen and (max-width: 768px)
+  .el-main
+    padding: 0
+    .blogWrap
+      padding: 0 0
+      .blogItem
+        padding: 2% 3% 0 3%
+  .paginationWrap
+    padding: 3% 3% 3% 3%
+    display: none
+    flex-direction: row-reverse
+    .el-pagination
+      padding: 0
+  &.change
+    display: flex
 </style>

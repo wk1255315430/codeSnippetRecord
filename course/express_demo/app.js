@@ -32,7 +32,7 @@ app.use(requestIp.mw())
 
 //使用中间件验证token合法性
 app.use(expressJwt({ secret: 'secret' }).unless({
-  path:/^\/api\/user/ //路由开头/api/user不验证token
+  path: /^\/api\/user/ //路由开头/api/user不验证token
 }));
 
 
@@ -44,7 +44,19 @@ app.use('/api/user', usersRouter);
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
+app.use(function (err, req, res, next) {
+  // logErrors
+  console.error(err.stack)
+  next(err)
+})
+app.use(function (err, req, res, next) {
+  // clientErrorHandler
+  if (req.xhr) {
+    res.status(err.status).send({ error: err.code })
+  } else {
+    next(err)
+  }
+})
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
@@ -52,8 +64,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send({ status: err.status, error: err.code });
 });
 
 module.exports = app;

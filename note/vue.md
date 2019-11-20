@@ -211,7 +211,8 @@ export default new Vuex.Store({
 
 
 ```js
- created() {
+# app.vue
+created() {
     window.addEventListener("beforeunload", () => {
       sessionStorage.setItem("token", this.token);
     });
@@ -222,7 +223,9 @@ export default new Vuex.Store({
   }
 ```
 
-> `window.addEventListener("beforeunload", callback);` 刷新页面前触发，页面刷新把vuex中的state数据存储到sessionStorage中，当刷新页面时，组件进入生命周期销毁前(`beforeDestroy()`)，vuex中的state将全部销毁，页面刷新完毕后，接着进入组件生命周期的`created()`,判断vuex的state为空时,触发`mutations` 更改state值为缓存中的token值，并随后删除缓存中的token.这样不管怎么刷新vuex中的state并不会丢失，缓存也不会存有token(严格意义上会存后删除,闪一下，这里的缓存应该加密存储)
+> `window.addEventListener("beforeunload", callback);` 刷新页面前触发，页面刷新把vuex中的state数据存储到sessionStorage中，当刷新页面时，组件进入生命周期销毁前(`beforeDestroy()`)，vuex中的state将全部销毁，页面刷新完毕后，接着进入组件生命周期的`created()`,判断vuex的state为空时,触发`mutations` 更改state值为缓存中的token值，并随后删除缓存中的token.这样不管怎么刷新vuex中的state并不会丢失，缓存也不会存有token(严格意义上会存后删除,闪一下，这里的缓存应该加密存储)。
+>
+> 注意：事件监听函数作用在<font color="red">全局导航守卫</font>后面，还有<font color="red">safri</font>的监听时间对象为`pagehide`
 
 ### 对称加密
 

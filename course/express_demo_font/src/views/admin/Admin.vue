@@ -87,19 +87,13 @@ export default {
     }
   },
   created() {
-    window.addEventListener("beforeunload", () => {
-      sessionStorage.setItem("token", this.token);
-    });
-    if (!this.token) {
-      this.$store.commit("beforEunload", sessionStorage.getItem("token"));
-      sessionStorage.removeItem("token");
-    }
+    // window.addEventListener("beforeunload", () => {
+    //   sessionStorage.setItem("token", this.token);
+    // });
+    // if (!this.token) {
+    //   this.$store.commit("beforEunload", sessionStorage.getItem("token"));
+    //   sessionStorage.removeItem("token");
+    // }
   },
-  beforeDestroy(){
-     if (!this.token) {
-      this.$store.commit("beforEunload", sessionStorage.getItem("token"));
-      sessionStorage.removeItem("token");
-    }
-  }
 };
 </script>

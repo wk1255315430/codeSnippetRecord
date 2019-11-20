@@ -6,6 +6,12 @@
     <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
+<script>
+export default {
+  methods: {},
+  created() {}
+};
+</script>
 <style lang="stylus">
 body, html
   margin: 0
@@ -40,4 +46,9 @@ body, html
       text-indent: 0 !important
     img
       max-width: 100%
+@media screen and (max-width: 768px)
+  body, html
+    margin: 0
+    padding: 0
+    font-size: 8px
 </style>

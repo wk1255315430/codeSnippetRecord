@@ -2,7 +2,8 @@ import axios from "axios";
 import qs from "qs";
 import { showLoading, hideLoading } from "./loading";
 import { Message as message } from "element-ui";
-import store from "../store";
+import $store from "../store";
+import $router from "../router/index";
 
 axios.defaults.timeout = 20000; //响应时间
 // axios.defaults.headers["Content-Type"] =
@@ -18,8 +19,8 @@ axios.interceptors.request.use(
       return config;
     }
     if (/^\/api\/admin/.test(config.url)) {
-      if (store.getters["token"]) {
-        config.headers.Authorization = `Bearer ${store.getters["token"]}`;
+      if ($store.getters["token"]) {
+        config.headers.Authorization = `Bearer ${$store.getters["token"]}`;
         return config;
       } else {
         message.error("token未获得");
@@ -46,6 +47,16 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
+    if (error.response.data.error === "invalid_token") {
+      message({
+        message: "登录认证超期,请重新登录,",
+        type: "error",
+        duration: 1000,
+        onClose: () => {
+          $router.push("/login");
+        }
+      });
+    }
     hideLoading();
     return Promise.reject(error);
   }

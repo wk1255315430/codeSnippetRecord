@@ -2,21 +2,21 @@
 export default [
   {
     path: "/admin",
-    name: "admin",
+    name: "管理后台",
     meta: { requiredAuth: true },
     component: () =>
       import(/* webpackChunkName: "admin" */ "@/views/admin/Admin.vue"),
     children: [
       {
         path: "/admin/article",
-        name: "article",
+        name: "文章发布",
         meta: { requiredAuth: true },
         component: () =>
           import(/* webpackChunkName: "admin" */ "@/views/admin/Article.vue")
       },
       {
         path: "/admin/category",
-        name: "category",
+        name: "分类",
         meta: { requiredAuth: true, keepAlive: true },
         component: () =>
           import(/* webpackChunkName: "admin" */ "@/views/admin/Category.vue")
@@ -25,8 +25,7 @@ export default [
   },
   {
     path: "/login",
-    name: "login",
-    meta: { requiredAuth: true },
+    name: "登录",
     component: () =>
       import(/*webpackChunkName:"login" */ "@/views/admin/Login.vue")
   }
