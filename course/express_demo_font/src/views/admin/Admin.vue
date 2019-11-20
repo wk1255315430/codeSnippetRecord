@@ -94,6 +94,12 @@ export default {
       this.$store.commit("beforEunload", sessionStorage.getItem("token"));
       sessionStorage.removeItem("token");
     }
+  },
+  beforeDestroy(){
+     if (!this.token) {
+      this.$store.commit("beforEunload", sessionStorage.getItem("token"));
+      sessionStorage.removeItem("token");
+    }
   }
 };
 </script>

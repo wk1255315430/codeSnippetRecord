@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 import { showLoading, hideLoading } from "./loading";
-import { Message as message} from "element-ui"
+import { Message as message } from "element-ui";
 import store from "../store";
 
 axios.defaults.timeout = 20000; //响应时间
@@ -17,12 +17,17 @@ axios.interceptors.request.use(
     if (config.url == "/api/user/bmsl") {
       return config;
     }
-    if (store.getters["token"]) {
-      config.headers.Authorization = `Bearer ${store.getters["token"]}`;
+    if (/^\/api\/admin/.test(config.url)) {
+      if (store.getters["token"]) {
+        config.headers.Authorization = `Bearer ${store.getters["token"]}`;
+        return config;
+      } else {
+        message.error("token未获得");
+        return Promise.reject("token未获得");
+      }
     } else {
-      message.error("token未获取，请登录！");
+      return config;
     }
-    return config;
   },
   error => {
     hideLoading();
@@ -42,7 +47,6 @@ axios.interceptors.response.use(
   },
   error => {
     hideLoading();
-    message.error("网络异常");
     return Promise.reject(error);
   }
 );

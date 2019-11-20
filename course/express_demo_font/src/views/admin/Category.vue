@@ -147,15 +147,11 @@ export default {
           }else{
             this.$message.success('删除失败');
           }
-          
         })
-        console.log(data.id)
       });
     },
   },
-  created() {
-    this.loadNode();
-  }
+  created() {}
 };
 </script>
 

@@ -269,7 +269,7 @@ router.post('/bmsl', (req, res, next) => {
         const hmac = cryptoAES.crypto.createHmac('sha256', 'hubery');
         let ret = hmac.update(uname);
         ret = hmac.digest('hex')
-        let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '4h' })
+        let token = jwt.sign({ token: ret }, 'secret', { expiresIn: '1h' })
         res.json({
           status: true,
           data: '登录成功',
