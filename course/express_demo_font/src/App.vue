@@ -17,6 +17,10 @@ body, html
   margin: 0
   padding: 0
   font-size: 10px
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
   .el-header
     box-sizing: border-box
   .clearfix::before
@@ -25,11 +29,9 @@ body, html
 #nprogress .bar
   background: rgb(76, 164, 214) !important
 .el-autocomplete-suggestion
-  width: auto !important
+  width: 100% !important
 .el-message
   width: auto !important
-.el-scrollbar__wrap
-  overflow-x: hidden
 .markdown
   .title
     font-size: 2.5rem
@@ -51,4 +53,27 @@ body, html
     margin: 0
     padding: 0
     font-size: 8px
+  .el-autocomplete-suggestion
+    left: 0 !important
+    li
+      overflow: visible
+      display: -webkit-box
+      -webkit-box-orient: vertical
+      -webkit-line-clamp: 2
+      overflow: hidden
+      white-space: normal
+      height: 4rem
+      line-height: 2rem
+      font-size: 2rem
+      display: flex
+      align-items: center
+      padding: 0 10px
+      &:nth-child(odd)
+        background-color: #fafafa
+      &:nth-child(even)
+        background-color: #ffffff
+    .el-scrollbar
+      overflow: visible
+      .el-scrollbar__wrap
+        overflow-x: scroll
 </style>

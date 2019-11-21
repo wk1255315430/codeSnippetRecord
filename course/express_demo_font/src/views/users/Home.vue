@@ -221,14 +221,29 @@ export default {
     padding: 0
     .blogWrap
       padding: 0 0
+      & /deep/.el-tabs
+        .el-tabs__header
+          .el-tabs__nav
+            .el-tabs__item
+              padding: 0 15px 0 0
+          &:first-child
+            padding-left 15px
       .blogItem
         padding: 2% 3% 0 3%
   .paginationWrap
-    padding: 3% 3% 3% 3%
+    padding: 0
+    margin: 3% 0
     display: none
     flex-direction: row-reverse
-    .el-pagination
+    /deep/ .el-pagination
       padding: 0
+      width: 100%
+      .el-pager
+        display: flex
+        justify-content: flex-end
+        li
+          margin: 0 7px 0 0 !important
+          padding: 0 !important
   &.change
     display: flex
 </style>

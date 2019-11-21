@@ -1,7 +1,6 @@
 <template>
   <el-container>
     <Header />
-    <el-scrollbar class="page-component__scroll">
       <el-main>
         <div class="detailsWrap">
           <div class="markdown">
@@ -33,7 +32,7 @@
           <span>20踩</span>
             </div>-->
           </div>
-          <div class="rightWrap">
+          <div class="rightWrap hidden-xs-only">
             <div class="recommendKey">
               <el-button
                 size="mini"
@@ -60,7 +59,7 @@
         <!-- <el-footer></el-footer> -->
       </el-main>
       <el-backtop
-        style=" width: 40px;right: 40px; border-radius:0;"
+        style="border-radius:0;"
         target=".page-component__scroll .el-scrollbar__wrap"
       >
         <div
@@ -71,7 +70,6 @@
           }"
         >UP</div>
       </el-backtop>
-    </el-scrollbar>
   </el-container>
 </template>
 
@@ -224,73 +222,93 @@ export default {
   flex-direction: column !important
   overflow: hidden
   height: 100vh
-  .el-header
-    background-color: #ffffff
-  .el-scrollbar__wrap
-    .el-main
+  .el-main
+    width: 100%
+    padding: 0
+    .detailsWrap
+      display: flex
       width: 80%
-      padding: 0
       margin: 1rem auto
-      .detailsWrap
-        display: flex
-        .markdown
-          background-color: #ffffff
-          width: 70%
-          flex-shrink: 0
-          position: relative
-          .md-body
-            padding: 2%
-          .gb
-            display: inline-flex
-            flex-direction: column
-            position: absolute
-            bottom: 20%
-            right: -6rem
-            .el-avatar
-              background: none
-              width: 30px
-              height: 30px
-              border-radius: 0
-              cursor: pointer
-            .last
-              margin-top: 1rem
-            span
-              text-align: center
-        .rightWrap
-          margin-left: 1%
-          flex-grow: 1
-          .recommendKey
-            background-color: #ffffff
-            display: inline-flex
-            flex-wrap: wrap
-            padding: 0.5rem
-            .el-button
-              margin: 0.1em
-          .recommendArticle
+      .markdown
+        background-color: #ffffff
+        width: 70%
+        flex-shrink: 0
+        position: relative
+        color #333
+        .title
+          margin 1rem 1rem 0 1rem
+        .md-body
+          padding: 2%
+        .gb
+          display: inline-flex
+          flex-direction: column
+          position: absolute
+          bottom: 20%
+          right: -6rem
+          .el-avatar
+            background: none
+            width: 30px
+            height: 30px
+            border-radius: 0
+            cursor: pointer
+          .last
             margin-top: 1rem
-            padding: 0.5rem 0.5rem 1rem 0.5rem
-            font-size: 1.4rem
-            display: flex
-            flex-direction: column
-            background-color: #ffffff
-            .li
-              &:last-child
-                .el-divider
-                  display: none
-              .el-link
-                display: -webkit-box !important
-                -webkit-box-orient: vertical
-                -webkit-line-clamp: 2
-                overflow: hidden
-                -webkit-box-align: start
-                -moz-box-align: start
-                padding: 0 0.5rem
+          span
+            text-align: center
+      .rightWrap
+        margin-left: 1%
+        flex-grow: 1
+        .recommendKey
+          background-color: #ffffff
+          display: inline-flex
+          flex-wrap: wrap
+          padding: 0.5rem
+          position: sticky;
+          top: 1rem;
+          .el-button
+            margin: 0.1em
+        .recommendArticle
+          margin-top: 1rem
+          padding: 0.5rem 0.5rem 1rem 0.5rem
+          font-size: 1.4rem
+          display: flex
+          flex-direction: column
+          background-color: #ffffff
+          .li
+            &:last-child
               .el-divider
-                margin: 0
+                display: none
+            .el-link
+              display: -webkit-box !important
+              -webkit-box-orient: vertical
+              -webkit-line-clamp: 2
+              overflow: hidden
+              -webkit-box-align: start
+              -moz-box-align: start
+              padding: 0 0.5rem
+            .el-divider
+              margin: 0
 @media screen and (max-width: 768px)
   .el-container
-    .el-header
-    .el-scrollbar__wrap
-      .el-main
-        width: 100%
+    .el-main
+      width: 100%
+      margin 0
+      background-color #ffffff
+      .detailsWrap
+        display: block
+        .markdown
+          width: 100%
+          background-color: #ffffff
+          div
+            font-size 1.9rem
+            font-weight 400
+            line-height 2.1rem
+            padding 0 .3rem
+          .des
+            p
+              word-wrap: break-word
+              word-break: break-all
+    .el-backtop
+      right 10px !important
+      bottom 40px !important
 </style>

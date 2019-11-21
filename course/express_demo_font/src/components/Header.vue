@@ -11,14 +11,14 @@
       mode="horizontal"
       @select="handleSelect"
     >
-      <el-menu-item index="1">文章</el-menu-item>
-      <el-submenu index="2">
+      <el-menu-item index="1" class="hidden-xs-only">文章</el-menu-item>
+      <el-submenu index="2" class="hidden-xs-only">
         <template slot="title">我的工作台</template>
         <el-menu-item index="2-1">选项1</el-menu-item>
         <el-menu-item index="2-2">选项2</el-menu-item>
         <el-menu-item index="2-3">选项3</el-menu-item>
       </el-submenu>
-      <el-menu-item index="3">
+      <el-menu-item index="3" class="hidden-xs-only">
         <a href="https://www.ele.me" target="_blank">订单管理</a>
       </el-menu-item>
       <div class="inputWrap" v-on:keyup.enter="getSerchData">
@@ -38,8 +38,17 @@
           </template>
         </el-autocomplete>
       </div>
+      <div class="menu hidden-sm-and-up">
+        <i class="el-icon-menu" @click="drawer = !drawer"></i>
+      </div>
     </el-menu>
     <div class="line"></div>
+    <el-drawer
+      :visible.sync="drawer"
+      :direction="direction"
+    >
+      <span>我来啦!</span>
+    </el-drawer>
   </el-header>
 </template>
 
@@ -50,7 +59,9 @@ export default {
     return {
       activeIndex: "1",
       activeIndex2: "1",
-      search: ""
+      search: "",
+      drawer: false,
+      direction: "rtl"
     };
   },
   methods: {
@@ -84,20 +95,37 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
 .el-header
   display: flex
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1)
+  background-color: #ffffff
+  padding: 0 1rem
   .logo
     flex-shrink: 0
+    display: flex
+    align-items: center
     img
       height: 60px
+      display: block
   .el-menu
     flex-grow: 1
     display: flex
     flex-direction: row-reverse
     background: none
+    .el-autocomplete-suggestion
+      width: 100%
+      li
+        display: -webkit-box
+        -webkit-box-orient: vertical
+        -webkit-line-clamp: 2
+        overflow: hidden
+    .el-icon-menu
+      font-size: 2.8rem
+      color: #303133
+  .menu
+    display: flex
+    align-items: center
   .inputWrap
     display: flex
     align-items: center
@@ -117,4 +145,20 @@ export default {
           color: #ddd
   .el-menu.el-menu--horizontal
     border-bottom: none
+@media screen and (max-width: 768px)
+  .el-header
+    padding 0
+    .logo
+      padding: 1rem
+      img
+        height: 40px
+    .el-menu
+      display: flex
+      justify-content: space-between
+      flex-direction: row
+      &::after, &::before
+        display: none
+    .menu
+      width 40px
+      justify-content center
 </style>
